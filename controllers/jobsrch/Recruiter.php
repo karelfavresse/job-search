@@ -11,7 +11,7 @@
         }
     
         /**
-         Main entry for Recruiter page. Dispatches to correct method based on current level.
+         * Main entry for Recruiter page. Dispatches to correct method based on current level.
          */
         public function index()
         {
@@ -114,9 +114,9 @@
         }
         
         /**
-         Retrieves a fresh copy for the detail ID, then shows the detail page.
-         If no row can be found for the detail ID, and error is shown instead.
-         @param array &$data Data array sent to the loader's view() method.
+         * Retrieves a fresh copy for the detail ID, then shows the detail page.
+         * If no row can be found for the detail ID, and error is shown instead.
+         * @param array &$data Data array sent to the loader's view() method.
          */
         private function _startEdit() {
             
@@ -137,8 +137,8 @@
         }
         
         /**
-         Saves the current detail Recruiter and shows the detail screen again.
-         @param array &$data Data array sent to the loader's view() method.
+         * Saves the current detail Recruiter and shows the detail screen again.
+         * @param array &$data Data array sent to the loader's view() method.
          */
         private function _save() {
          
@@ -176,8 +176,8 @@
         }
         
         /**
-         Deletes the current detail Recruiter and shows the list screen again.
-         @param array &$data Data array sent to the loader's view() method.
+         * Deletes the current detail Recruiter and shows the list screen again.
+         * @param array &$data Data array sent to the loader's view() method.
          */
         private function _delete() {
             
@@ -195,8 +195,8 @@
         }
         
         /**
-         Reloads data from the database using the search criteria stored in the session. Shows the list screen
-         @param array &$data Data array sent to the loader's view() method.
+         * Reloads data from the database using the search criteria stored in the session. Shows the list screen
+         * @param array &$data Data array sent to the loader's view() method.
          */
         private function _refresh() {
             
@@ -214,9 +214,9 @@
         }
         
         /**
-         Processes the Back button, setting the 'crit' entry in the $data array from session. It then shows the specified page (search or list).
-         @param array &$data Data array sent to the loader's view() method.
-         @param string $page Page to actually show (search or list).
+         * Processes the Back button, setting the 'crit' entry in the $data array from session. It then shows the specified page (search or list).
+         * @param array &$data Data array sent to the loader's view() method.
+         * @param string $page Page to actually show (search or list).
          */
         private function _back($page) {
             
@@ -236,17 +236,17 @@
         }
         
         /**
-         Adds the common page title to the $data parameter.
-         @param array &$data Data array sent to the loader's view() method during actual view building.
+         * Adds the common page title to the $data parameter.
+         * @param array &$data Data array sent to the loader's view() method during actual view building.
          */
         private function _setTitle(&$data) {
             $data['title'] = 'Recruiters';
         }
         
         /**
-         Resets the search criteria to their default values, and shows the search screen again.
-         
-         @param array &$data Data array sent to the loader's view() method. This method adds the 'crit' entry with the new search criteria object.
+         * Resets the search criteria to their default values, and shows the search screen again.
+         *
+         * @param array &$data Data array sent to the loader's view() method. This method adds the 'crit' entry with the new search criteria object.
          */
         private function _reset() {
             
@@ -267,8 +267,8 @@
         }
         
         /**
-         Creates a blank Recruiter object, then shows the detail screen.
-         @param array &$data Data array sent to the loader's view() method.
+         * Creates a blank Recruiter object, then shows the detail screen.
+         * @param array &$data Data array sent to the loader's view() method.
          */
         private function _doNew($fromPage) {
 
@@ -279,9 +279,9 @@
         }
         
         /**
-         Stores the search criteria from the request into session, searches the database using those criteria, and then displays the list screen.
-         Validates search criteria.
-         @param array &$data Data array sent to the loader's view() method.
+         * Stores the search criteria from the request into session, searches the database using those criteria, and then displays the list screen.
+         * Validates search criteria.
+         * @param array &$data Data array sent to the loader's view() method.
          */
         private function _search() {
             

@@ -15,8 +15,8 @@
         }
         
         /**
-         Main entry for the page this controller handles. Dispatches to the various methods based on level.
-         This method also loads the form helper.
+         * Main entry for the page this controller handles. Dispatches to the various methods based on level.
+         * This method also loads the form helper.
          */
         public function index() {
             
