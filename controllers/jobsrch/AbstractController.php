@@ -282,8 +282,9 @@
          */
         private function _doSearch() {
             
+            $rows = $this->recruiter_model->search($_SESSION[$this->sessionKey('crit')]);
             $list = array();
-            foreach ($this->recruiter_model->search($_SESSION[$this->sessionKey('crit')]) as $entry) {
+            foreach ($rows as $entry) {
                 $list[$entry->id] = $entry;
             }
             $_SESSION[$this->sessionKey('list')] = $list;

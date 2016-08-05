@@ -64,6 +64,13 @@
             <div class="col-md-9 col-xs-0">&nbsp;</div>
         </div>
 <?php endif; ?>
+        <div class="row form-group">
+            <label for="version" class="col-md-1 control-label">Version:</label>
+            <div class="col-md-2 col-xs-11">
+                <input type="text" class="form-control" id="version" value="<?php echo $detail->version;?>" readonly>
+            </div>
+            <div class="col-md-9 col-xs-0">&nbsp;</div>
+        </div>
     </div>
 
     <div id="deleteConfirmBox" class="modal fade" role="dialog">
