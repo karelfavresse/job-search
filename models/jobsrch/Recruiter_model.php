@@ -53,10 +53,10 @@
         }
         
         /**
-         Returns an array with the data form the specified entity.
-         @param Recruiter_entity $entity The entity whose data to return as an array.
-         @param boolean $incl_id Whether or not to include the id property. Default is TRUE.
-         @return array An array containing the data of the entity.
+         * Returns an array with the data form the specified entity.
+         * @param Recruiter_entity $entity The entity whose data to return as an array.
+         * @param boolean $incl_id Whether or not to include the id property. Default is TRUE.
+         * @return array An array containing the data of the entity.
          */
         public function toData(Recruiter_entity $entity, $incl_id = TRUE) {
             $data = array('name' => $entity->name, 'email_address' => $entity->email_address, 'phone_number' => $entity->phone_number, 'contact_name' => $entity->contact_name);
@@ -66,10 +66,10 @@
         }
         
         /**
-         Loads entity content from the specified data array. This is the reverse of toData().
-         @param array $data array containing the data for this entity.
-         @param Recruiter_entity $entity reference to the entity to fill with data. If NULL, a new entity is created.
-         @return Recruiter_entity The $entity parameter if not NULL, otherwise a new entity. This entity has been filled with the data from the $data array.
+         * Loads entity content from the specified data array. This is the reverse of toData().
+         * @param array $data array containing the data for this entity.
+         * @param Recruiter_entity $entity reference to the entity to fill with data. If NULL, a new entity is created.
+         * @return Recruiter_entity The $entity parameter if not NULL, otherwise a new entity. This entity has been filled with the data from the $data array.
          */
         public function loadFromData($data, Recruiter_entity $entity = NULL) {
             
