@@ -1,3 +1,4 @@
+<?php /* Copyright 2016 Karel Favresse */ ?>
 <div class="form-group">
     <label for="name" class="col-sm-1 control-label">Make:</label>
     <div class="col-sm-11">

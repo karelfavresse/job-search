@@ -1,3 +1,4 @@
+<?php /* Copyright 2016 Karel Favresse */ ?>
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
     
     require_once 'Recruiter_entity.php';
@@ -77,15 +78,15 @@
                 $entity = new Recruiter_entity();
             
             if(isset($data['id']))
-                $this->id = $data['id'];
+                $entity->id = $data['id'];
             if(isset($data['name']))
-                $this->name=$data['name'];
+                $entity->name=$data['name'];
             if(isset($data['contact_name']))
-                $this->contact_name = $data['contact_name'];
+                $entity->contact_name = $data['contact_name'];
             if(isset($data['email_address']))
-                $this->email_address = $data['email_address'];
+                $entity->email_address = $data['email_address'];
             if(isset($data['phone_number']))
-                $this->contact_name = $data['contact_name'];
+                $entity->contact_name = $data['contact_name'];
             
             return $entity;
         }

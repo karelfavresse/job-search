@@ -1,3 +1,4 @@
+<?php /* Copyright 2016 Karel Favresse */ ?>
 <html>
     <head>
         <title><?php echo $title ?></title>
