@@ -109,8 +109,8 @@
          */
         private function _index_page() {
             
-            if( ! isset($_SESSION[$this->sessionKey('criteria')]))
-                $_SESSION[$this->sessionKey('criteria')] = $this->createCriteria();
+            if( ! isset($_SESSION[$this->sessionKey('crit')]))
+                $_SESSION[$this->sessionKey('crit')] = $this->createCriteria();
             $this->_load_search_view();
         }
         
@@ -282,7 +282,12 @@
          */
         private function _doSearch() {
             
-            $rows = $this->recruiter_model->search($_SESSION[$this->sessionKey('crit')]);
+            if(isset($_SESSION[$this->sessionKey('crit')]))
+                $rows = $this->recruiter_model->search($_SESSION[$this->sessionKey('crit')]);
+            else {
+                $_SESSION[$this->sessionKey('crit')] = $this->createCriteria();
+                $rows = array();
+            }
             $list = array();
             foreach ($rows as $entry) {
                 $list[$entry->id] = $entry;
