@@ -30,22 +30,26 @@
         }
 
         public function toData($entity, $incl_id = TRUE) {
-            return parent::toData($entity, $incl_id) + array('name' => $entity->name, 'email_address' => $entity->email_address, 'phone_number' => $entity->phone_number, 'contact_name' => $entity->contact_name, 'version' => $entity->version);
+            
+            $data = parent::toData($entity, $incl_id);
+            
+            $this->toDataAttribute($entity, 'name', $data);
+            $this->toDataAttribute($entity, 'contact_name', $data);
+            $this->toDataAttribute($entity, 'email_address', $data);
+            $this->toDataAttribute($entity, 'contact_name', $data);
+            
+            return $data;
         }
         
         public function loadFromData($data, $entity = NULL) {
             
             $entity = parent::loadFromData($data, $entity);
             
-            if(isset($data['name']))
-                $entity->name=$data['name'];
-            if(isset($data['contact_name']))
-                $entity->contact_name = $data['contact_name'];
-            if(isset($data['email_address']))
-                $entity->email_address = $data['email_address'];
-            if(isset($data['phone_number']))
-                $entity->contact_name = $data['contact_name'];
-            
+            $this->loadAttributeFromData($data, 'name', $entity);
+            $this->loadAttributeFromData($data, 'contact_name', $entity);
+            $this->loadAttributeFromData($data, 'email_address', $entity);
+            $this->loadAttributeFromData($data, 'contact_name', $entity);
+
             return $entity;
         }
     

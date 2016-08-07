@@ -78,9 +78,19 @@
         public function toData($entity, $incl_id = TRUE) {
             $data = array();
             if($incl_id)
-                $data['id'] = $entity->id;
-            $data['version'] = $entity->version;
+                $this->toDataAttribute($entity, 'id', $data);
+            $this->toDataAttribute($entity, 'version', $data);
             return $data;
+        }
+        
+        /**
+         * Stores the specified attribute of the entity into the data array.
+         * @param Object $entity Entity containing the attribute
+         * @param string $attributeName name of the attribute to store.
+         * @param array &$data reference to the array to store the data in
+         */
+        protected function toDataAttribute($entity, $attributeName, &$data) {
+            $data[$attributeName] = $entity->{$attributeName};
         }
         
         /**
@@ -94,12 +104,21 @@
             if($entity === NULL)
                 $entity = new $this->entityName();
 
-            if(isset($data['id']))
-                $entity->id = $data['id'];
-            if(isset($data['version']))
-                $entity->version = $data['version'];
+            $this->loadAttributeFromData($data, 'id', $entity);
+            $this->loadAttributeFromData($data, 'version', $entity);
             
             return $entity;
+        }
+        
+        /**
+         * Loads the element from $data array specified by $attributeName into the attribute of the entity named $attributeName.
+         * @param array $data array containing the data for this entity
+         * @param string $attributeName name of attribute to load
+         * @param Object $entity Entity to contain the data
+         */
+        protected function loadAttributeFromData($data, $attributeName, $entity) {
+            if(isset($data[$attributeName]))
+                $entity->{$attributeName} = $data[$attributeName];
         }
         
     }
