@@ -119,6 +119,9 @@
          */
         private function _process_search() {
             
+            if ( ! isset($_SESSION[$this->sessionKey('crit')]))
+                $_SESSION[$this->sessionKey('crit')] = $this->createCriteria($this->input->post());
+            
             if(NULL !== $this->input->post('action')) {
                 if( ! $this->processSearchAction($this->input->post('action')) )
                     $this->_load_search_view();
