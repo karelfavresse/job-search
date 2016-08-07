@@ -368,7 +368,7 @@ $config['encryption_key'] = '';
 |
 */
 $config['sess_driver'] = 'files';
-$config['sess_cookie_name'] = 'ci_session';
+$config['sess_cookie_name'] = 'jobsrch_session';
 $config['sess_expiration'] = 0;
 $config['sess_save_path'] = '/Volumes/Chewbacca/ci/sessions';
 $config['sess_match_ip'] = FALSE;
