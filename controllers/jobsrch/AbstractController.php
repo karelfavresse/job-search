@@ -164,7 +164,16 @@
             $_SESSION[$this->sessionKey('detail')] = $this->createEntity();
             $_SESSION[$this->sessionKey('detail_frompage')] = $fromPage;
             
+            $this->preNew();
+            
             $this->load_detail_view();
+        }
+        
+        /**
+         * Sets up additional entries in the session if required by the load_detail_view() method.
+         */
+        protected function preNew() {
+            // NOOP
         }
         
         /**

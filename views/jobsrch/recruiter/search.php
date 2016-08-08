@@ -27,14 +27,14 @@
 
     <div class="container-fluid form-horizontal" id="searchpanel">
         <div class="row form-group">
-            <label for="name" class="control-label col-md-1">Name:</label>
-            <div class="col-md-5 col-xs-11">
+            <label for="name" class="control-label col-sm-3 col-md-1">Name:</label>
+            <div class="col-sm-5 col-xs-12">
                 <input type="text" class="form-control" id="name" name="name" value="<?php echo $crit->name ;?>">
             </div>
         </div>
         <div class="row form-group">
-            <label for="maxrows" class="control-label col-md-1">Max Rows:</label>
-            <div class="col-md-2 col-xs-11">
+            <label for="maxrows" class="control-label col-sm-3 col-md-1">Max Rows:</label>
+            <div class="col-sm-2 col-xs-12">
                 <input type="text" class="form-control" id="maxrows" name="maxrows" value="<?php echo $crit->maxrows ;?>">
             </div>
         </div>

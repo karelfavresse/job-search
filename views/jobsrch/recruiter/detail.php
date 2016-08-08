@@ -28,44 +28,56 @@
 
     <div class="container-fluid form-horizontal" id="detail">
         <div class="row form-group">
-            <label for="name" class="col-md-1 control-label">Name:</label>
-            <div class="col-md-3 col-xs-11">
+            <div class="col-md-1 col-sm-3 control-label">
+                <label for="name">Name:</label>
+            </div>
+            <div class="col-sm-5 col-md-3 col-xs-12">
                 <input type="text" class="form-control" id="name" name="name" value="<?php echo $detail->name;?>">
             </div>
         </div>
         <div class="row form-group">
-            <label for="contact_name" class="col-md-1 control-label">Contact Name:</label>
-            <div class="col-md-3 col-xs-11">
+            <div class="col-md-1 col-sm-3 control-label">
+                <label for="contact_name">Contact Name:</label>
+            </div>
+            <div class="col-md-3 col-xs-12 col-sm-5">
                 <input type="text" class="form-control" id="contact_name" name="contact_name" value="<?php echo $detail->contact_name;?>">
             </div>
         </div>
         <?php include_once dirname(__DIR__) . '/address/detail.php'; ?>
         <div class="row form-group">
-            <label for="email_address" class="col-md-1 control-label">Email Address:</label>
-            <div class="col-md-3 col-xs-11">
+            <div class="col-md-1 col-sm-3 control-label">
+                <label for="email_address">Email Address:</label>
+            </div>
+            <div class="col-md-3 col-xs-12 col-sm-5">
                 <input type="text" class="form-control" id="email_address" name="email_address" value="<?php echo $detail->email_address;?>">
             </div>
         </div>
         <div class="row form-group">
-            <label for="phone_number" class="col-md-1 control-label">Phone Number:</label>
-            <div class="col-md-2 col-xs-11">
+            <div class="col-md-1 col-sm-3 control-label">
+                <label for="phone_number">Phone Number:</label>
+            </div>
+            <div class="col-md-2 col-xs-12 col-sm-5">
                 <input type="text" class="form-control" id="phone_number" name="phone_number" value="<?php echo $detail->phone_number;?>">
             </div>
         </div>
 <?php if(isset($detail->id)) : ?>
         <div class="row form-group">
-            <label for="id" class="col-md-1 control-label">ID:</label>
-            <div class="col-md-2 col-xs-11">
+            <div class="col-md-1 col-sm-3 control-label">
+                <label for="id">ID:</label>
+            </div>
+            <div class="col-md-2 col-xs-12 col-sm-5">
                 <input type="text" class="form-control" id="id" value="<?php echo $detail->id;?>" readonly>
             </div>
         </div>
-<?php endif; ?>
         <div class="row form-group">
-            <label for="version" class="col-md-1 control-label">Version:</label>
-            <div class="col-md-2 col-xs-11">
+            <div class="col-md-1 col-sm-3 control-label">
+                <label for="version">Version:</label>
+            </div>
+            <div class="col-md-2 col-xs-12 col-sm-5">
                 <input type="text" class="form-control" id="version" value="<?php echo $detail->version;?>" readonly>
             </div>
         </div>
+<?php endif; ?>
     </div>
 
     <div id="deleteConfirmBox" class="modal fade" role="dialog">

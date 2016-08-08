@@ -64,6 +64,11 @@
             $_SESSION[$this->sessionKey('address')] = $address;
         }
         
+        protected function preNew() {
+            
+            $_SESSION[$this->sessionKey('address')] = new Address_entity();
+        }
+        
         protected function preSave($detail) {
             
             // Load address from input data.
