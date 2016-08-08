@@ -65,6 +65,21 @@
             return $query->custom_row_object(0, $this->entityName());
         }
         
+        /**
+         * Returns all entities for the IDs specified in the parameter array.
+         * @param array $idArray array with IDs
+         * @return array array with addresses for the specified IDs
+         */
+        public function getList($idArray) {
+            
+            $this->db->from($this->tableName());
+            $this->db->where_in('id', $idArray);
+            
+            $query = $this->db->get();
+            
+            return $query->custom_result_object($this->entityName());
+        }
+
         public function delete($detail) {
             return $this->db->delete($this->tableName(), array('id' => $detail->id, 'version' => $detail->version)) !== FALSE;
         }

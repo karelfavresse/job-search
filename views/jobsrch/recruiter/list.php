@@ -34,6 +34,7 @@
             <tr>
                 <th>Name</th>
                 <th>Contact Name</th>
+                <th>Address</th>
                 <th>Email Address</th>
                 <th>Phone Number</th>
                 <th>Action</th>
@@ -45,6 +46,11 @@
             <tr>
                 <td><?php echo $entry->name; ?></td>
                 <td><?php echo $entry->contact_name; ?></td>
+<?php if ( isset ( $addrList[$entry->id] ) ) : ?>
+                <td><?php echo $addrList[$entry->id]; ?></td>
+<?php else : ?>
+                <td></td>
+<?php endif; ?>
                 <td><?php echo $entry->email_address; ?></td>
                 <td><?php echo $entry->phone_number; ?></td>
                 <td>

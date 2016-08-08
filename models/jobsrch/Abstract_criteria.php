@@ -7,10 +7,14 @@
         
         public function __construct($data) {
         
-            if(isset($data['maxrows']))
-                $this->maxrows = $data['maxrows'];
+            $this->load($data, 'maxrows', 100);
+        }
+        
+        protected function load(&$data, $name, $default) {
+            if(isset($data[$name]))
+                $this->{$name} = $data[$name];
             else
-                $this->maxrows = 100;
+                $this->{$name} = $default;
         }
     
     }

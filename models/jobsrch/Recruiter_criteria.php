@@ -10,10 +10,7 @@
         public function __construct($data) {
             parent::__construct($data);
             
-            if(isset($data['name']))
-                $this->name = $data['name'];
-            else
-                $this->name = '';
+            $this->load($data, 'name', '');
         }
         
     }

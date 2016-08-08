@@ -31,14 +31,12 @@
             <div class="col-md-5 col-xs-11">
                 <input type="text" class="form-control" id="name" name="name" value="<?php echo $crit->name ;?>">
             </div>
-            <div class="col-md-6 col-xs-0">&nbsp;</div>
         </div>
         <div class="row form-group">
             <label for="maxrows" class="control-label col-md-1">Max Rows:</label>
             <div class="col-md-2 col-xs-11">
                 <input type="text" class="form-control" id="maxrows" name="maxrows" value="<?php echo $crit->maxrows ;?>">
             </div>
-            <div class="col-md-9 col-xs-0">&nbsp;</div>
         </div>
     </div>
 

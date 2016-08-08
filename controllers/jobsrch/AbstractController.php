@@ -89,15 +89,15 @@
             switch($level) {
                 case self::LEVEL_SEARCH :
                     if($this->input->post('action') === NULL)
-                        $this->_index_page();
+                        $this->index_page();
                     else
-                        $this->_process_search();
+                        $this->process_search();
                     break;
                 case self::LEVEL_LIST :
-                    $this->_process_list();
+                    $this->process_list();
                     break;
                 case self::LEVEL_DETAIL :
-                    $this->_process_detail();
+                    $this->process_detail();
                     break;
             }
             
@@ -107,26 +107,26 @@
         /**
          * Processes the index page for this controller. Shows the search page. 
          */
-        private function _index_page() {
+        protected function index_page() {
             
             if( ! isset($_SESSION[$this->sessionKey('crit')]))
                 $_SESSION[$this->sessionKey('crit')] = $this->createCriteria();
-            $this->_load_search_view();
+            $this->load_search_view();
         }
         
         /**
          * Processes the search level. Dispatches to other methods according to the 'action' hidden input field.
          */
-        private function _process_search() {
+        protected function process_search() {
             
             if ( ! isset($_SESSION[$this->sessionKey('crit')]))
                 $_SESSION[$this->sessionKey('crit')] = $this->createCriteria($this->input->post());
             
             if(NULL !== $this->input->post('action')) {
                 if( ! $this->processSearchAction($this->input->post('action')) )
-                    $this->_load_search_view();
+                    $this->load_search_view();
             } else {
-                $this->_load_search_view();
+                $this->load_search_view();
             }
         }
         
@@ -140,13 +140,13 @@
             
             switch($action) {
                 case 'reset' :
-                    $this->_reset();
+                    $this->reset();
                     break;
                 case 'search' :
-                    $this->_search();
+                    $this->search();
                     break;
                 case 'new' :
-                    $this->_doNew('search');
+                    $this->doNew('search');
                     break;
                 default :
                     return FALSE;
@@ -159,19 +159,19 @@
          * Creates a blank Recruiter object, then shows the detail screen.
          * @param string $fromPage The level 'New' is called from. The 'Back' button uses this to return to that level.
          */
-        private function _doNew($fromPage) {
+        protected function doNew($fromPage) {
             
             $_SESSION[$this->sessionKey('detail')] = $this->createEntity();
             $_SESSION[$this->sessionKey('detail_frompage')] = $fromPage;
             
-            $this->_load_detail_view();
+            $this->load_detail_view();
         }
         
         /**
          * Stores the search criteria from the request into session, searches the database using those criteria, and then displays the list screen.
          * Validates search criteria.
          */
-        private function _search() {
+        protected function search() {
             
             $this->load->library('form_validation');
             
@@ -182,10 +182,10 @@
             
             if ( ! $useValidation OR $this->form_validation->run() !== FALSE)
             {
-                $this->_doSearch();
-                $this->_load_list_view();
+                $this->doSearch();
+                $this->load_list_view();
             } else {
-                $this->_load_search_view();
+                $this->load_search_view();
             }
         }
         
@@ -203,22 +203,22 @@
         /**
          * Resets the search criteria to their default values, and shows the search screen again.
          */
-        private function _reset() {
+        protected function reset() {
             
             $_SESSION[$this->sessionKey('crit')] = $this->createCriteria();
-            $this->_load_search_view();
+            $this->load_search_view();
         }
         
         /**
          * Processes the list level. Dispatches to other methods according to the 'action' hidden input field.
          */
-        private function _process_list() {
+        protected function process_list() {
             
             if(NULL !== $this->input->post('action')) {
                 if ( ! $this->processListAction($this->input->post('action')) )
-                    $this->_load_list_view();
+                    $this->load_list_view();
             } else {
-                $this->_load_list_view();
+                $this->load_list_view();
             }
             
         }
@@ -233,16 +233,16 @@
             
             switch($this->input->post('action')) {
                 case 'refresh' :
-                    $this->_refresh();
+                    $this->refresh();
                     break;
                 case 'back' :
-                    $this->_back('search');
+                    $this->back('search');
                     break;
                 case 'new' :
-                    $this->_doNew('list');
+                    $this->doNew('list');
                     break;
                 case 'edit' :
-                    $this->_startEdit();
+                    $this->startEdit();
                     break;
                 default :
                     return FALSE;
@@ -254,17 +254,17 @@
          * Processes the Back button, setting the 'crit' entry in the $data array from session. It then shows the specified page (search or list).
          * @param string $page Page to actually show (search or list).
          */
-        private function _back($page) {
+        protected function back($page) {
             
             switch($page) {
                 case 'search' :
                     unset($_SESSION[$this->sessionKey('detail')]);
                     unset($_SESSION[$this->sessionKey('list')]);
-                    $this->_load_search_view();
+                    $this->load_search_view();
                     break;
                 case 'list' :
                     unset($_SESSION[$this->sessionKey('detail')]);
-                    $this->_load_list_view();
+                    $this->load_list_view();
                     break;
             }
             
@@ -274,16 +274,16 @@
         /**
          * Reloads data from the database using the search criteria stored in the session. Shows the list screen
          */
-        private function _refresh() {
+        protected function refresh() {
             
-            $this->_doSearch();
-            $this->_load_list_view();
+            $this->doSearch();
+            $this->load_list_view();
         }
         
         /**
          * Perform the actual search and set the list.
          */
-        private function _doSearch() {
+        protected function doSearch() {
             
             if(isset($_SESSION[$this->sessionKey('crit')]))
                 $rows = $this->recruiter_model->search($_SESSION[$this->sessionKey('crit')]);
@@ -302,7 +302,7 @@
          * Retrieves a fresh copy for the detail ID, then shows the detail page.
          * If no row can be found for the detail ID, and error is shown instead.
          */
-        private function _startEdit() {
+        protected function startEdit() {
             
             $id = $this->input->post('detail_id');
             if($id === NULL) {
@@ -316,14 +316,24 @@
                 return;
             }
             
+            $this->startEditInternal($detail);
+            
+            $this->load_detail_view();
+        }
+        
+        /**
+         * Sets the specified $detail as the edited detail in the session. Override to set additional elements.
+         * @param Object $detail The detail to set
+         */
+        protected function startEditInternal($detail) {
+            
             $_SESSION[$this->sessionKey('detail')] = $detail;
-            $this->_load_detail_view();
         }
         
         /**
          * Saves the current detail and shows the detail screen again.
          */
-        private function _save() {
+        protected function save() {
             
             $this->load->library('form_validation');
             
@@ -334,34 +344,49 @@
             if ( ! $useValidation OR $this->form_validation->run() !== FALSE)
             {
                 
-                $isNew = ! isset($detail->id);
-                if( $isNew )
-                    $d = $this->getModel()->insert($detail);
-                else
-                    $d = $this->getModel()->update($detail);
+                $d = $this->preSave($detail);
                 if($d === FALSE) {
-                    UIMessage::addError('Failed to save ' . $this->getName() );
+                    UIMessage::addError('Save aborted');
                 } else {
                     $detail = $d;
-                    $_SESSION[$this->sessionKey('list')][$detail->id] = $detail;
-                    UIMessage::addInfo($this->getName() . ' saved.');
+                    $isNew = ! isset($detail->id);
+                    if( $isNew )
+                        $d = $this->getModel()->insert($detail);
+                    else
+                        $d = $this->getModel()->update($detail);
+                    if($d === FALSE) {
+                        UIMessage::addError('Failed to save ' . $this->getName() );
+                    } else {
+                        $detail = $d;
+                        $_SESSION[$this->sessionKey('list')][$detail->id] = $detail;
+                        UIMessage::addInfo($this->getName() . ' saved.');
+                    }
                 }
             }
             $_SESSION[$this->sessionKey('detail')] = $detail;
             
-            $this->_load_detail_view();
+            $this->load_detail_view();
+        }
+        
+        /**
+         * Perform any actions before the actual save takes place.
+         * @aparam Object $detail the detail about to be saved
+         * @return mixed Either the object to be saved if OK, otherwise FALSE (don't save). If returning FALSE, this method should set any error message indicating the reason (UIMessage).
+         */
+        protected function preSave($detail) {
+            // NOOP
         }
         
         /**
          * Processes the detail level. Dispatches to other methods according to the 'action' hidden input field.
          */
-        private function _process_detail() {
+        protected function process_detail() {
             
             if(NULL !== $this->input->post('action')) {
                 if ( ! $this->processDetailAction($this->input->post('action')) )
-                    $this->_load_detail_view();
+                    $this->load_detail_view();
             } else {
-                $this->_load_detail_view();
+                $this->load_detail_view();
             }
             
         }
@@ -376,17 +401,17 @@
             
             switch($action) {
                 case 'save' :
-                    $this->_save();
+                    $this->save();
                     break;
                 case 'back' :
                     if(isset($_SESSION[$this->sessionKey('detail_frompage')]))
                         $toPage = $_SESSION[$this->sessionKey('detail_frompage')];
                     else
                         $toPage = 'list';
-                    $this->_back($toPage);
+                    $this->back($toPage);
                     break;
                 case 'delete' :
-                    $this->_delete();
+                    $this->delete();
                     break;
                 default :
                     return FALSE;
@@ -397,7 +422,7 @@
         /**
          * Deletes the current detail and shows the list screen again.
          */
-        private function _delete() {
+        protected function delete() {
             
             $detail = $_SESSION[$this->sessionKey('detail')];
             if($this->getModel()->delete($detail)) {
@@ -405,17 +430,17 @@
                 UIMessage::addInfo($this->getName() . ' "' . $detail->name . '" deleted.');
                 $list =& $_SESSION[$this->sessionKey('list')];
                 unset($list[$detail->id]);
-                $this->_load_list_view();
+                $this->load_list_view();
             } else {
                 UIMessage::addError('Failed to delete ' . $this->getName() );
-                $this->_load_detail_view();
+                $this->load_detail_view();
             }
         }
         
         /**
          * Loads the search view
          */
-        private function _load_search_view() {
+        protected function load_search_view() {
             
             $data = [];
             $this->setTitle($data);
@@ -440,7 +465,7 @@
         /**
          * Loads the list view 
          */
-        private function _load_list_view() {
+        protected function load_list_view() {
             
             $data = [];
             $this->setTitle($data);
@@ -449,9 +474,19 @@
             
             $data['list'] = $_SESSION[$this->sessionKey('list')];
             
+            $this->set_list_data($data);
+            
             $this->load->view('jobsrch/header', $data);
             $this->loadListPanel($data);
             $this->load->view('jobsrch/footer');
+        }
+        
+        /**
+         * Set the list data for the view. The 'title' and 'list' entries have already been set.
+         * @param array &$data data array sent to the view.
+         */
+        protected function set_list_data(&$data) {
+            // NOOP
         }
         
         /**
@@ -465,7 +500,7 @@
         /**
          * Loads the detail view.
          */
-        private function _load_detail_view() {
+        protected function load_detail_view() {
             
             $data = [];
             $this->setTitle($data);
@@ -473,11 +508,22 @@
             $_SESSION[$this->sessionKey('level')] = self::LEVEL_DETAIL;
             
             $data['detail'] = $_SESSION[$this->sessionKey('detail')];
+            
+            $this->set_detail_data($data);
+            
             $this->detailButtonState($data, $data['detail']);
             
             $this->load->view('jobsrch/header', $data);
             $this->loadDetailPanel($data);
             $this->load->view('jobsrch/footer');
+        }
+        
+        /**
+         * Set the detail data for the view. The 'title' and 'detail' entries have already been set.
+         * @param array &$data data array sent to the view.
+         */
+        protected function set_detail_data(&$data) {
+            // NOOP
         }
         
         /**

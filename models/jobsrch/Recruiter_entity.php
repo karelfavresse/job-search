@@ -2,6 +2,7 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
     require_once __DIR__ . '/Abstract_entity.php';
+    require_once __DIR__ . '/Address_entity.php';
     
     class Recruiter_entity extends Abstract_entity {
     
