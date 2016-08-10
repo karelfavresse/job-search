@@ -2,7 +2,8 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
     
     require_once 'UIMessage.php';
-    
+    require_once 'Language.php';
+
     abstract class AbstractController extends CI_Controller {
         
         const LEVEL_SEARCH = 0;
@@ -14,6 +15,7 @@
             $this->loadModel();
             $this->load->helper('url_helper');
             $this->load->library('session');
+            Language::setup();
         }
         
         /* ===== Abstract methods ======= */
@@ -204,7 +206,7 @@
          */
         protected function setupCriteriaValidationRules() {
             
-            $this->form_validation->set_rules('maxrows', 'Max. Rows', 'trim|required|integer');
+            $this->form_validation->set_rules('maxrows', lang('label-search-maxrows'), 'trim|required|integer');
             
             return TRUE;
         }

@@ -24,9 +24,9 @@
         
         protected function setupDetailValidationRules() {
             
-            $this->form_validation->set_rules('name', 'Name', 'trim|required');
-            $this->form_validation->set_rules('contact_name', 'Contact Name', 'trim|required');
-            $this->form_validation->set_rules('email_address', 'Email Address', 'trim|valid_email');
+            $this->form_validation->set_rules('name', lang('label-detail-recruiter-name'), 'trim|required');
+            $this->form_validation->set_rules('contact_name', lang('label-detail-recruiter-contactname'), 'trim|required');
+            $this->form_validation->set_rules('email_address', lang('label-detail-recruiter-emailaddress'), 'trim|valid_email');
             
             $this->address_library->setupValidationRules();
             
@@ -34,7 +34,7 @@
         }
     
         protected function setTitle(&$data) {
-            $data['title'] = 'Recruiters';
+            $data['title'] = lang('title-recruiters');
         }
         
         protected function createEntity() {

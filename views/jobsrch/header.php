@@ -24,11 +24,11 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="<?php echo site_url('jobsrch'); ?>">Job Search</a>
+                    <a class="navbar-brand" href="<?php echo site_url('jobsrch'); ?>"><?php echo lang('navbar-brand-name'); ?></a>
                 </div>
                 <div class="collapse navbar-collapse" id="navbar">
                     <ul class="nav navbar-nav">
-                        <li><a href="<?php echo site_url('jobsrch/recruiter'); ?>">Recruiters</a></li>
+                        <li><a href="<?php echo site_url('jobsrch/recruiter'); ?>"><?php echo lang('navbar-recruiterslink-name'); ?></a></li>
                         <li><a href="#">Page 2</a></li>
                         <li><a href="#">Page 3</a></li>
                     </ul>

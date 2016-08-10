@@ -45,10 +45,10 @@
             
             $this->CI->load->library('form_validation');
             
-            $this->CI->form_validation->set_rules('zip_code', 'Post Code', 'trim|required');
-            $this->CI->form_validation->set_rules('locality', 'Locality', 'trim|required');
+            $this->CI->form_validation->set_rules('zip_code', lang('label-detail-address-zipcode'), 'trim|required');
+            $this->CI->form_validation->set_rules('locality', lang('label-detail-address-locality'), 'trim|required');
             
-            $this->CI->form_validation->set_rules('street', 'Street', array(
+            $this->CI->form_validation->set_rules('street', lang('label-detail-address-street'), array(
                                             'trim',
                                             array('check_street', array($this, 'check_street'))
                                             ));
@@ -66,13 +66,13 @@
             if ( empty ($this->CI->input->post('pobox_number'))) {
                 // PO box not specified, must specify at least street and house number.
                 if ( empty($this->CI->input->post('street')) || empty($this->CI->input->post('house_number'))  ) {
-                    $this->CI->form_validation->set_message('check_street', 'Must specify either street and house number, or PO box.');
+                    $this->CI->form_validation->set_message('check_street', lang('message-address-empty'));
                     return FALSE;
                 }
             } else {
                 // PO box specified, cannot specify street/house/box number.
                 if ( ! empty($this->CI->input->post('street')) || ! empty($this->CI->input->post('house_number')) || ! empty($this->CI->input->post('box_number')) ) {
-                    $this->CI->form_validation->set_message('check_street', 'Cannot specify both street/house/box and PO box.');
+                    $this->CI->form_validation->set_message('check_street', lang('messsage-address-street-and-pobox'));
                     return FALSE;
                 }
             }

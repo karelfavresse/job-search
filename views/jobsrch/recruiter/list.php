@@ -11,13 +11,13 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <button type="submit" class="btn btn-default navbar-btn" onclick="$('#action').val('back')" title="Go back to search criteria" data-toggle="tooltip" data-container="body" data-placement="auto bottom"><span class="glyphicon glyphicon-menu-left"></span> Back</button>
-                <button type="submit" class="btn btn-default navbar-btn" onclick="$('#action').val('refresh')" title="Refresh search results" data-toggle="tooltip" data-container="body" data-placement="auto bottom"><span class="glyphicon glyphicon-refresh"></span> Refresh</button>
+                <button type="submit" class="btn btn-default navbar-btn" onclick="$('#action').val('back')" title="<?php echo lang('button-tip-back-search-recruiter'); ?>" data-toggle="tooltip" data-container="body" data-placement="auto bottom"><span class="glyphicon glyphicon-menu-left"></span> <?php echo lang('button-title-back'); ?></button>
+                <button type="submit" class="btn btn-default navbar-btn" onclick="$('#action').val('refresh')" title="<?php echo lang('button-tip-refresh-recruiter'); ?>" data-toggle="tooltip" data-container="body" data-placement="auto bottom"><span class="glyphicon glyphicon-refresh"></span> <?php echo lang('button-title-refresh'); ?></button>
                 <span style="width:1em;display:inline-block"></span>
             </div>
             <div class="collapse navbar-collapse" id="toolbar">
                 <ul class="nav navbar-nav">
-                    <li><button type="submit" class="btn btn-default navbar-btn" onclick="$('#action').val('new')" title="Create a new recruiter" data-toggle="tooltip" data-container="body" data-placement="auto bottom"><span class="glyphicon glyphicon-plus"></span> New</button></li>
+                    <li><button type="submit" class="btn btn-default navbar-btn" onclick="$('#action').val('new')" title="<?php echo lang('button-tip-new-recruiter'); ?>" data-toggle="tooltip" data-container="body" data-placement="auto bottom"><span class="glyphicon glyphicon-plus"></span> <?php echo lang('button-title-new'); ?></button></li>
                 </ul>
             </div>
         </div>
@@ -32,12 +32,12 @@
     <table id="list" class="table table-striped table-bordered table-responsive" width="100%">
         <thead>
             <tr>
-                <th>Name</th>
-                <th>Contact Name</th>
-                <th>Address</th>
-                <th>Email Address</th>
-                <th>Phone Number</th>
-                <th>Action</th>
+                <th><?php echo lang('list-header-recruiter-name'); ?></th>
+                <th><?php echo lang('list-header-recruiter-contactname'); ?></th>
+                <th><?php echo lang('list-header-recruiter-address'); ?></th>
+                <th><?php echo lang('list-header-recruiter-emailaddress'); ?></th>
+                <th><?php echo lang('list-header-recruiter-phonenumber'); ?></th>
+                <th><?php echo lang('list-header-action'); ?></th>
             </tr>
         </thead>
 <?php if ( isset($list) ) : ?>
@@ -54,7 +54,7 @@
                 <td><?php echo $entry->email_address; ?></td>
                 <td><?php echo $entry->phone_number; ?></td>
                 <td>
-                    <a href="#" onclick="$('#action').val('edit');$('#detail_id').val('<?php echo $entry->id;?>');form.submit();" data-toggle="tooltip" data-container="body" data-placement="auto bottom" title="Edit this Recruiter"><span class="glyphicon glyphicon-pencil"></span></a>
+                    <a href="#" onclick="$('#action').val('edit');$('#detail_id').val('<?php echo $entry->id;?>');form.submit();" data-toggle="tooltip" data-container="body" data-placement="auto bottom" title="<?php echo lang('button-tip-edit-recruiter'); ?>"><span class="glyphicon glyphicon-pencil"></span></a>
                 </td>
             </tr>
 <?php endforeach; ?>
