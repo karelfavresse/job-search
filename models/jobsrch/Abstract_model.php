@@ -43,7 +43,7 @@
             $this->db->where('id', $detail->id);
             $this->db->where('version', $detail->version);
             $detail->version++;
-            $this->db->set($detail);
+            $this->db->set($this->toData($detail));
             if($this->db->update($this->tableName())) {
                 if($this->db->affected_rows() > 0)
                     return $detail;

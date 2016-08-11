@@ -354,6 +354,7 @@
             $detail = $this->getModel()->loadFromData($this->input->post(), $detail);
             if ( ! $useValidation OR $this->form_validation->run() !== FALSE)
             {
+                $this->db->trans_start();
                 
                 $d = $this->preSave($detail);
                 if($d === FALSE) {
@@ -373,6 +374,8 @@
                         UIMessage::addInfo($this->getName() . ' saved.');
                     }
                 }
+                
+                $this->db->trans_complete();
             }
             $_SESSION[$this->sessionKey('detail')] = $detail;
             
@@ -435,6 +438,8 @@
          */
         protected function delete() {
             
+            $this->db->trans_start();
+            
             $detail = $_SESSION[$this->sessionKey('detail')];
             if($this->getModel()->delete($detail)) {
                 unset($_SESSION[$this->sessionKey('detail')]);
@@ -446,6 +451,8 @@
                 UIMessage::addError('Failed to delete ' . $this->getName() );
                 $this->load_detail_view();
             }
+            
+            $this->db->trans_complete();
         }
         
         /**
