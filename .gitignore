@@ -24,3 +24,13 @@ controllers/News.php
 controllers/Pages.php
 
 config/database.php
+
+core/MY_Lang.php
+
+language/arabic/calendar_lang.php
+
+language/arabic/date_lang.php
+
+language/arabic/db_lang.php
+
+language/arabic/email_lang.php
