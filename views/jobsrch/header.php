@@ -1,4 +1,9 @@
 <?php /* Copyright 2016 Karel Favresse */ ?>
+<?php
+    // Do login check
+    require_once dirname(dirname(__DIR__)) . '/controllers/jobsrch/Login.php';
+    Login::check();
+?>
 <html>
     <head>
         <title><?php echo $title ?></title>
@@ -27,11 +32,17 @@
                     <a class="navbar-brand" href="<?php echo site_url('jobsrch'); ?>"><?php echo lang('navbar-brand-name'); ?></a>
                 </div>
                 <div class="collapse navbar-collapse" id="navbar">
+<?php if (Login::is_logged_in()) : ?>
                     <ul class="nav navbar-nav">
                         <li><a href="<?php echo site_url('jobsrch/recruiter'); ?>"><?php echo lang('navbar-recruiterslink-name'); ?></a></li>
                         <li><a href="#">Page 2</a></li>
                         <li><a href="#">Page 3</a></li>
                     </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><p class="navbar-text"><?php echo Login::current_user(); ?></p></li>
+                        <li><a href="<?php echo site_url('jobsrch/logout'); ?>"><span class="glyphicon glyphicon-log-in"></span> <?php echo lang('navbar-logout'); ?></a></li>
+                    </ul>
+<?php endif; ?>
                 </div>
             </div>
         </nav>
@@ -41,7 +52,7 @@
     if($msgl != NULL) :
         foreach($msgl as $msg) : ?>
 <div class="alert alert-danger">
-<strong>Error</strong> <?php echo $msg; ?>
+<strong><?php echo lang('label-error'); ?></strong> <?php echo $msg; ?>
 </div>
 <?php
     endforeach;
@@ -51,7 +62,7 @@
     if($msgl != NULL) :
         foreach($msgl as $msg) : ?>
 <div class="alert alert-warning">
-<strong>Warning</strong> <?php echo $msg; ?>
+<strong><?php echo lang('label-warning'); ?></strong> <?php echo $msg; ?>
 </div>
 <?php
     endforeach;
@@ -62,7 +73,7 @@
     if($msgl != NULL) :
         foreach($msgl as $msg) : ?>
 <div class="alert alert-success">
-<strong>Success</strong> <?php echo $msg; ?>
+<strong><?php echo lang('label-success'); ?></strong> <?php echo $msg; ?>
 </div>
 <?php
     endforeach;
@@ -73,7 +84,7 @@
     if($msgl != NULL) :
         foreach($msgl as $msg) : ?>
 <div class="alert alert-info">
-<strong>Info</strong> <?php echo $msg; ?>
+<strong><?php echo lang('label-info'); ?></strong> <?php echo $msg; ?>
 </div>
 <?php
     endforeach;

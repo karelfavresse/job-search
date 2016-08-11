@@ -56,6 +56,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     #$route['default_controller'] = 'pages/view';
     #$route['(:any)'] = 'pages/view/$1';
 
+$route['jobsrch/login'] = 'jobsrch/login';
 $route['jobsrch/recruiter/(:any)'] = 'jobsrch/recruiter/$1';
 $route['jobsrch/recruiter'] = 'jobsrch/recruiter';
 $route['jobsrch'] = 'jobsrch/home';

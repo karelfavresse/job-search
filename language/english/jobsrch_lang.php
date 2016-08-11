@@ -3,9 +3,11 @@
 
     $lang['navbar-brand-name'] = 'Job Search';
     $lang['navbar-recruiterslink-name'] = 'Recruiters';
+    $lang['navbar-logout'] = 'Logout';
     
-    $lang['title-home'] = 'Job Search Home';
+    $lang['title-home'] = 'Home';
     $lang['title-recruiters'] = 'Recruiters';
+    $lang['title-login'] = 'Login';
     
     $lang['button-title-search'] = 'Search';
     $lang['button-title-reset'] = 'Reset';
@@ -15,6 +17,7 @@
     $lang['button-title-save'] = 'Save';
     $lang['button-title-delete'] = 'Delete';
     $lang['button-title-cancel'] = 'Cancel';
+    $lang['button-title-login'] = 'Login';
 
     $lang['button-tip-search-recruiter'] = 'Search Recruiters';
     $lang['button-tip-reset-recruiter'] = 'Reset search criteria';
@@ -27,6 +30,15 @@
     $lang['button-tip-delete-recruiter'] = 'Delete this Recruiter';
     
     $lang['label-search-maxrows'] = 'Max. Rows';
+    
+    $lang['label-error'] = 'Error';
+    $lang['label-warning'] = 'Warning';
+    $lang['label-success'] = 'Success';
+    $lang['label-info'] = 'Info';
+    
+    $lang['label-login-name'] = 'Login Name';
+    $lang['label-login-pwd'] = 'Password';
+    $lang['message-login-failed'] = 'Could not login with supplied credentials.';
     
     $lang['list-header-action'] = 'Action';
     
