@@ -49,13 +49,13 @@
             if( $this->form_validation->run() !== FALSE ) {
                 // Form OK, check user/pwd
                 if( $this->authentication_library->authenticate($this->input->post('name'), $this->input->post('pwd')) ) {
-                    // User/pwd OK, store in session. Then redirect to stored page, or home page if no stored page.
-                    $_SESSION['auth_user'] = $this->input->post('name');
+                    // Redirect to stored page, or home page if no stored page.
                     $url = $this->session->auth_redirect_after_login;
                     if($url === NULL)
                         $url = 'jobsrch';
                     else
                         unset($_SESSION['auth_redirect_after_login']);
+                    session_regenerate_id(true);
                     redirect(site_url($url));
                 } else {
                     // User/pwd not OK, issue message and redisplay login page.
