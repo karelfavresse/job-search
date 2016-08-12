@@ -15,6 +15,7 @@
             $this->loadModel();
             $this->load->helper('url_helper');
             $this->load->library('session');
+            $this->load->library('jobsrch/Authorization_library');
             Language::setup();
         }
         
@@ -38,6 +39,12 @@
         protected abstract function setTitle(&$data);
         
         /**
+         * Returns the type in singular form. This type is used to load the correct translation.
+         * @return string Type in singular form.
+         */
+        protected abstract function singularType();
+        
+        /**
          * Returns the model used for data.
          * @return Object the model instance.
          */
@@ -50,6 +57,51 @@
         protected abstract function createEntity();
         
         /* ====== End of abstract methods ====== */
+        
+        /**
+         * Returns the authority code to create an entity.
+         * @return mixed the authority code, or FALSE if no authority is required.
+         */
+        protected function createAuthCode() {
+            return FALSE;
+        }
+        
+        /**
+         * Returns the authority code to update an entity.
+         * @return mixed the authority code, or FALSE if no authority is required.
+         */
+        protected function updateAuthCode() {
+            return FALSE;
+        }
+        
+        /**
+         * Returns the authority code to delete an entity.
+         * @return mixed the authority code, or FALSE if no authority is required.
+         */
+        protected function deleteAuthCode() {
+            return FALSE;
+        }
+        
+        public function can_create() {
+            $ac = $this->createAuthCode();
+            if( ! $ac )
+                return TRUE;
+            return $this->authorization_library->is_authorized($ac);
+        }
+        
+        public function can_update() {
+            $ac = $this->updateAuthCode();
+            if( ! $ac )
+                return TRUE;
+            return $this->authorization_library->is_authorized($ac);
+        }
+        
+        public function can_delete() {
+            $ac = $this->deleteAuthCode();
+            if( ! $ac )
+                return TRUE;
+            return $this->authorization_library->is_authorized($ac);
+        }
         
         /**
          * Returns the name of the entity being worked with. Defaults to the class name.
@@ -467,6 +519,8 @@
             
             $data['crit'] = $_SESSION[$this->sessionKey('crit')];
             
+            $data['can_create'] = $this->can_create();
+            
             $this->load->view('jobsrch/header', $data);
             $this->loadSearchPanel($data);
             $this->load->view('jobsrch/footer');
@@ -491,7 +545,9 @@
             $_SESSION[$this->sessionKey('level')] = self::LEVEL_LIST;
             
             $data['list'] = $_SESSION[$this->sessionKey('list')];
-            
+
+            $data['can_create'] = $this->can_create();
+        
             $this->set_list_data($data);
             
             $this->load->view('jobsrch/header', $data);
@@ -522,11 +578,15 @@
             
             $data = [];
             $this->setTitle($data);
+            $data['type'] = $this->singularType();
             
             $_SESSION[$this->sessionKey('level')] = self::LEVEL_DETAIL;
             
             $data['detail'] = $_SESSION[$this->sessionKey('detail')];
             
+            $data['can_update'] = $this->can_update();
+            $data['can_delete'] = $this->can_delete();
+
             $this->set_detail_data($data);
             
             $this->detailButtonState($data, $data['detail']);

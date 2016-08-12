@@ -17,7 +17,9 @@
             </div>
             <div class="collapse navbar-collapse" id="toolbar">
                 <ul class="nav navbar-nav">
+<?php if ($can_create) : ?>
                     <li><button type="submit" class="btn btn-default navbar-btn" onclick="$('#action').val('new')" title="<?php echo lang('button-tip-new-recruiter'); ?>" data-toggle="tooltip" data-container="body" data-placement="auto bottom"><span class="glyphicon glyphicon-plus"></span> <?php echo lang('button-title-new'); ?></button></li>
+<?php endif; ?>
                 </ul>
             </div>
         </div>

@@ -1,8 +1,10 @@
 <?php /* Copyright 2016 Karel Favresse */ ?>
 <?php
     // Do login check
-    require_once dirname(dirname(__DIR__)) . '/controllers/jobsrch/Login.php';
-    Login::check();
+    require_once dirname(dirname(__DIR__)) . '/libraries/jobsrch/Authentication_library.php';
+    Authentication_library::check();
+    
+    require_once dirname(dirname(__DIR__)) . '/libraries/jobsrch/Authorization_library.php';
 ?>
 <html>
     <head>
@@ -20,7 +22,7 @@
                   });
         </script>
     </head>
-    <body style="margin-top:5em;">
+    <body style="margin-top:3em;">
         <nav class="navbar navbar-default navbar-fixed-top">
             <div class="container-fluid">
                 <div class="navbar-header">
@@ -32,21 +34,24 @@
                     <a class="navbar-brand" href="<?php echo site_url('jobsrch'); ?>"><?php echo lang('navbar-brand-name'); ?></a>
                 </div>
                 <div class="collapse navbar-collapse" id="navbar">
-<?php if (Login::is_logged_in()) : ?>
+<?php if (Authentication_library::is_logged_in()) : ?>
                     <ul class="nav navbar-nav">
+<?php if (Authorization_library::is_authorized('view_recruiters')) : ?>
                         <li><a href="<?php echo site_url('jobsrch/recruiter'); ?>"><?php echo lang('navbar-recruiterslink-name'); ?></a></li>
+<?php endif; ?>
                         <li><a href="#">Page 2</a></li>
                         <li><a href="#">Page 3</a></li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
-                        <li><p class="navbar-text"><?php echo Login::current_user(); ?></p></li>
+                        <li><p class="navbar-text"><?php echo Authentication_library::current_user(); ?></p></li>
                         <li><a href="<?php echo site_url('jobsrch/logout'); ?>"><span class="glyphicon glyphicon-log-in"></span> <?php echo lang('navbar-logout'); ?></a></li>
                     </ul>
 <?php endif; ?>
                 </div>
             </div>
         </nav>
-        <h1><?php echo $title ?></h1>
+        <div class="container-fluid form-horizontal" id="detail">
+            <h1><?php echo $title ?></h1>
 <?php
     $msgl = UIMessage::getErrorMessages();
     if($msgl != NULL) :
@@ -55,7 +60,7 @@
 <strong><?php echo lang('label-error'); ?></strong> <?php echo $msg; ?>
 </div>
 <?php
-    endforeach;
+        endforeach;
     endif;?>
 <?php
     $msgl = UIMessage::getWarningMessages();
@@ -66,8 +71,7 @@
 </div>
 <?php
     endforeach;
-    endif;
-    ?>
+    endif;?>
 <?php
     $msgl = UIMessage::getSuccessMessages();
     if($msgl != NULL) :
@@ -77,8 +81,7 @@
 </div>
 <?php
     endforeach;
-    endif;
-    ?>
+    endif;?>
 <?php
     $msgl = UIMessage::getInfoMessages();
     if($msgl != NULL) :
@@ -88,8 +91,7 @@
 </div>
 <?php
     endforeach;
-    endif;
-    ?>
+    endif;?>
 <?php
     UIMessage::clearAll();
     ?>

@@ -6,41 +6,11 @@
     
     class Login extends CI_Controller {
         
-        /**
-         * Checks whether the session has a logged in user. If not, the page is redirected to the login page. If this check is run on the login page, the redirect is not done.
-         */
-        public static function check() {
-
-            // Logged in ?
-            if(self::is_logged_in())
-                return;
-            
-            // Login page ?
-            $CI =& get_instance();
-            $CI->load->helper('url');
-            if(uri_string() === 'jobsrch/login')
-                return;
-            
-            // Not logged in. Store the requested page and redirect to the login page.
-            $_SESSION['auth_redirect_after_login'] = uri_string();
-            redirect(site_url('jobsrch/login'));
-        }
-        
-        public static function current_user() {
-            if(isset($_SESSION['auth_user']))
-                return $_SESSION['auth_user'];
-            else
-                return '';
-        }
-        
-        public static function is_logged_in() {
-            return isset($_SESSION['auth_user']);
-        }
-        
         public function __construct() {
             parent::__construct();
             $this->load->library('session');
             $this->load->helper('url');
+            $this->load->library('jobsrch/Authentication_library');
             Language::setup();
         }
         
@@ -78,7 +48,7 @@
             $this->form_validation->set_rules('pwd', lang('label-login-pwd'), 'trim|required');
             if( $this->form_validation->run() !== FALSE ) {
                 // Form OK, check user/pwd
-                if( $this->_check_user_pwd($this->input->post('name'), $this->input->post('pwd')) ) {
+                if( $this->authentication_library->authenticate($this->input->post('name'), $this->input->post('pwd')) ) {
                     // User/pwd OK, store in session. Then redirect to stored page, or home page if no stored page.
                     $_SESSION['auth_user'] = $this->input->post('name');
                     $url = $this->session->auth_redirect_after_login;
@@ -97,14 +67,6 @@
                 $this->_load_login_page();
             }
             
-        }
-        
-        private function _check_user_pwd() {
-            
-            // Test : allow everything
-            UIMessage::addWarning('TEST : any user allowed');
-            
-            return TRUE;
         }
         
         private function _load_login_page() {

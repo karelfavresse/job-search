@@ -5,7 +5,6 @@
 
 <?php echo validation_errors('<div class="alert alert-danger">', '</div>'); ?>
 
-<div class="container-fluid form-horizontal" id="detail">
     <div class="row form-group">
         <?php echo lang('label-login-name', 'name', array('class' => 'control-label col-md-1 col-sm-3')); ?>
         <div class="col-sm-5 col-md-3 col-xs-12">
@@ -19,9 +18,9 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-xs-12 well">
+        <div class="col-md-1 col-sm-3"></div>
+        <div class="col-md-11 col-sm-9 col-xs-12">
             <button type="submit" class="btn btn-primary" onclick="$('#action').val('login')"><span class="glyphicon glyphicon-log-in"></span> <?php echo lang('button-title-login'); ?></button>
         </div>
     </div>
-</div>
 </form>

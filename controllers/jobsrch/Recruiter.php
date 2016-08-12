@@ -37,6 +37,10 @@
             $data['title'] = lang('title-recruiters');
         }
         
+        protected function singularType() {
+            return 'Recruiter';
+        }
+        
         protected function createEntity() {
             return new Recruiter_entity();
         }
@@ -129,5 +133,17 @@
             
             $data['addrList'] = $_SESSION[$this->sessionKey('addrList')];
             
+        }
+        
+        protected function createAuthCode() {
+            return 'create_recruiter';
+        }
+        
+        protected function updateAuthCode() {
+            return 'update_recruiter';
+        }
+        
+        protected function deleteAuthCode() {
+            return 'delete_recruiter';
         }
     }

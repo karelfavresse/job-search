@@ -17,7 +17,9 @@
             </div>
             <div class="collapse navbar-collapse" id="toolbar">
                 <ul class="nav navbar-nav">
+<?php if ($can_create) : ?>
                     <li><button type="submit" class="btn btn-default navbar-btn" onclick="$('#action').val('new')" title="<?php echo lang('button-tip-new-recruiter'); ?>" data-toggle="tooltip" data-container="body" data-placement="auto bottom"><span class="glyphicon glyphicon-plus"></span> <?php echo lang('button-title-new'); ?></button></li>
+<?php endif; ?>
                 </ul>
             </div>
         </div>
@@ -25,7 +27,6 @@
 
     <?php echo validation_errors('<div class="alert alert-danger">', '</div>'); ?>
 
-    <div class="container-fluid form-horizontal" id="searchpanel">
         <div class="row form-group">
             <?php echo lang('label-search-recruiter-name', 'name', array('class' => 'control-label col-sm-3 col-md-1')); ?>
             <div class="col-sm-5 col-xs-12">
@@ -38,7 +39,6 @@
                 <input type="text" class="form-control" id="maxrows" name="maxrows" value="<?php echo $crit->maxrows ;?>">
             </div>
         </div>
-    </div>
 
 
 </form>

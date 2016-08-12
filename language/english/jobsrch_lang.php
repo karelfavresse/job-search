@@ -63,11 +63,13 @@
     $lang['list-header-recruiter-emailaddress'] = 'Email Address';
     $lang['list-header-recruiter-phonenumber'] = 'Phone Number';
     
-    $lang['dialog-title-delete-recruiter'] = 'Delete Recruiter';
+    $lang['dialog-title-delete'] = 'Delete {type}';
     
-    $lang['text-delete-recruiter'] = 'Delete Recruiter &quot;{name}&quot; ?';
+    $lang['dialog-text-delete'] = 'Delete {type} &quot;{name}&quot; ?';
     
     $lang['message-address-street-and-pobox'] = 'Cannot specify both street/house/box PO box.';
     $lang['message-address-empty'] = 'Must specify either street and house number, or PO box.';
+    
+    $lang['type-Recruiter'] = 'Recruiter';
 
 ?>

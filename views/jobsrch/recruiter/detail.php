@@ -13,12 +13,16 @@
                 </button>
                 <button type="submit" class="btn btn-default navbar-btn" onclick="$('#action').val('back')" title="<?php echo lang('button-tip-back-list-recruiter'); ?>" data-toggle="tooltip" data-container="body" data-placement="auto bottom"><span class="glyphicon glyphicon-menu-left"></span> <?php echo lang('button-title-back'); ?></button>
                 <span style="width:1em;display:inline-block"></span>
+<?php if ($can_update) : ?>
                 <button type="submit" class="btn btn-default navbar-btn" onclick="$('#action').val('save')" title="<?php echo lang('button-tip-save-recruiter'); ?>" data-toggle="tooltip" data-container="body" data-placement="auto bottom"><span class="glyphicon glyphicon-save"></span> <?php echo lang('button-title-save'); ?></button>
+<?php endif; ?>
                 <span style="width:1em;display:inline-block"></span>
             </div>
             <div class="collapse navbar-collapse" id="toolbar">
                 <ul class="nav navbar-nav">
+<?php if ($can_delete) : ?>
                     <li><button type="button" class="btn btn-danger navbar-btn <?php echo $button_state['delete']; ?>" onclick="$('#deleteConfirmBox').modal();" title="<?php echo lang('button-tip-delete-recruiter'); ?>" data-toggle="tooltip" data-container="body" data-placement="auto bottom" <?php echo $button_state['delete']; ?>><span class="glyphicon glyphicon-trash"></span> <?php echo lang('button-title-delete'); ?></button></li>
+<?php endif; ?>
                 </ul>
             </div>
         </div>
@@ -26,7 +30,6 @@
 
     <?php echo validation_errors('<div class="alert alert-danger">', '</div>'); ?>
 
-    <div class="container-fluid form-horizontal" id="detail">
         <div class="row form-group">
             <?php echo lang('label-detail-recruiter-name', 'name', array('class' => 'control-label col-md-1 col-sm-3')); ?>
             <div class="col-sm-5 col-md-3 col-xs-12">
@@ -72,10 +75,10 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title"><?php echo lang('dialog-title-delete'); ?></h4>
+                    <h4 class="modal-title"><?php echo str_replace('{type}', lang("type-$type"), lang('dialog-title-delete')); ?></h4>
                 </div>
                 <div class="modal-body">
-                    <p><?php echo str_replace('{name}', $detail->name, lang('text-delete-recruiter')); ?>
+                    <p><?php echo str_replace(array('{name}', '{type}'), array($detail->name, lang("type-$type")), lang('dialog-text-delete')); ?>
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-danger" onclick="$('#action').val('delete')"><span class="glyphicon glyphicon-trash"></span> <?php echo lang('button-title-delete'); ?></button>
