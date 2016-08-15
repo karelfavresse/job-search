@@ -45,6 +45,10 @@
             return new Recruiter_entity();
         }
         
+        protected function urlSegment() {
+            return 'recruiter';
+        }
+        
         protected function set_detail_data(&$data) {
             
             parent::set_detail_data($data);

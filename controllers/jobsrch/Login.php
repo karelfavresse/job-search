@@ -73,6 +73,7 @@
             
             $data = [];
             $data['title'] = lang('title-login');
+            $data['controller_name'] = 'login';
             
             $ln = $this->input->post('name');
             if($ln === NULL)

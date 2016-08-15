@@ -57,10 +57,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     #$route['(:any)'] = 'pages/view/$1';
 
 $route['jobsrch/login'] = 'jobsrch/login';
-$route['jobsrch/recruiter/(:any)'] = 'jobsrch/recruiter/$1';
-$route['jobsrch/recruiter'] = 'jobsrch/recruiter';
+$route['jobsrch/(:any)'] = 'jobsrch/$1';
 $route['jobsrch'] = 'jobsrch/home';
 $route['news/create'] = 'news/create';
+$route['news/view_details/(:any)'] = 'news/viewDetails/$1';
 $route['news/(:any)'] = 'news/view/$1';
 $route['news'] = 'news';
 $route['(:any)'] = 'pages/view/$1';

@@ -1,7 +1,5 @@
 <?php /* Copyright 2016 Karel Favresse */ ?>
-<?php echo form_open('jobsrch/recruiter'); ?>
-
-    <input type="hidden" name="action" id="action"/>
+<?php require_once dirname(__DIR__).'/messages.php'; ?>
 
     <nav class="navbar navbar-default">
         <div class="container-fluid">
@@ -11,17 +9,17 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <button type="submit" class="btn btn-default navbar-btn" onclick="$('#action').val('back')" title="<?php echo lang('button-tip-back-list-recruiter'); ?>" data-toggle="tooltip" data-container="body" data-placement="auto bottom"><span class="glyphicon glyphicon-menu-left"></span> <?php echo lang('button-title-back'); ?></button>
+                <button type="button" class="btn btn-default navbar-btn" onclick="doAction('back')" title="<?php echo lang('button-tip-back-list-recruiter'); ?>" ><span class="glyphicon glyphicon-menu-left"></span> <?php echo lang('button-title-back'); ?></button>
                 <span style="width:1em;display:inline-block"></span>
 <?php if ($can_update) : ?>
-                <button type="submit" class="btn btn-default navbar-btn" onclick="$('#action').val('save')" title="<?php echo lang('button-tip-save-recruiter'); ?>" data-toggle="tooltip" data-container="body" data-placement="auto bottom"><span class="glyphicon glyphicon-save"></span> <?php echo lang('button-title-save'); ?></button>
+                <button type="button" class="btn btn-default navbar-btn" onclick="doAction('save')" title="<?php echo lang('button-tip-save-recruiter'); ?>" ><span class="glyphicon glyphicon-save"></span> <?php echo lang('button-title-save'); ?></button>
 <?php endif; ?>
                 <span style="width:1em;display:inline-block"></span>
             </div>
             <div class="collapse navbar-collapse" id="toolbar">
                 <ul class="nav navbar-nav">
 <?php if ($can_delete) : ?>
-                    <li><button type="button" class="btn btn-danger navbar-btn <?php echo $button_state['delete']; ?>" onclick="$('#deleteConfirmBox').modal();" title="<?php echo lang('button-tip-delete-recruiter'); ?>" data-toggle="tooltip" data-container="body" data-placement="auto bottom" <?php echo $button_state['delete']; ?>><span class="glyphicon glyphicon-trash"></span> <?php echo lang('button-title-delete'); ?></button></li>
+                    <li><button type="button" class="btn btn-danger navbar-btn <?php echo $button_state['delete']; ?>" onclick="$('#deleteConfirmBox').modal();" title="<?php echo lang('button-tip-delete-recruiter'); ?>" <?php echo $button_state['delete']; ?>><span class="glyphicon glyphicon-trash"></span> <?php echo lang('button-title-delete'); ?></button></li>
 <?php endif; ?>
                 </ul>
             </div>
@@ -81,10 +79,9 @@
                     <p><?php echo str_replace(array('{name}', '{type}'), array($detail->name, lang("type-$type")), lang('dialog-text-delete')); ?>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-danger" onclick="$('#action').val('delete')"><span class="glyphicon glyphicon-trash"></span> <?php echo lang('button-title-delete'); ?></button>
+                    <button type="button" class="btn btn-danger" onclick="doAction('delete')"><span class="glyphicon glyphicon-trash"></span> <?php echo lang('button-title-delete'); ?></button>
                     <button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> <?php echo lang('button-title-cancel'); ?></button>
                 </div>
             </div>
         </div>
     </div>
-</form>

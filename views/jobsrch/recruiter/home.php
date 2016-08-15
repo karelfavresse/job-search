@@ -1,2 +1,4 @@
 <?php /* Copyright 2016 Karel Favresse */ ?>
-<p>list</p>
+<?php echo form_open('jobsrch/recruiter', array('id' => 'form')); ?>
+
+</form>

@@ -1,7 +1,4 @@
 <?php /* Copyright 2016 Karel Favresse */ ?>
-<?php echo form_open('jobsrch/login'); ?>
-
-<input type="hidden" name="action" id="action"/>
 
 <?php echo validation_errors('<div class="alert alert-danger">', '</div>'); ?>
 
@@ -23,4 +20,3 @@
             <button type="submit" class="btn btn-primary" onclick="$('#action').val('login')"><span class="glyphicon glyphicon-log-in"></span> <?php echo lang('button-title-login'); ?></button>
         </div>
     </div>
-</form>

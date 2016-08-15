@@ -16,7 +16,10 @@
 
         public function index()
         {
+            $this->load->helper('form');
+            
             $data['title'] = lang('title-home');
+            $data['controller_name'] = 'home';
             
             $this->load->view('jobsrch/header', $data);
             $this->load->view('jobsrch/home', $data);

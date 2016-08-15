@@ -21,6 +21,19 @@
                   $('[data-toggle="tooltip"]').tooltip();
                   });
         </script>
+        <script type="text/javascript">
+            function doAction($action) {
+                $("#action").val($action);
+                $form = $("#form");
+                $.post( $form.attr('action'), $form.serialize(),
+                    function(data) {
+                       $content = $("#content");
+                       $content.empty();
+                       $content.append(data);
+                    }
+                );
+            }
+        </script>
     </head>
     <body style="margin-top:3em;">
         <nav class="navbar navbar-default navbar-fixed-top">
@@ -52,46 +65,6 @@
         </nav>
         <div class="container-fluid form-horizontal" id="detail">
             <h1><?php echo $title ?></h1>
-<?php
-    $msgl = UIMessage::getErrorMessages();
-    if($msgl != NULL) :
-        foreach($msgl as $msg) : ?>
-<div class="alert alert-danger">
-<strong><?php echo lang('label-error'); ?></strong> <?php echo $msg; ?>
-</div>
-<?php
-        endforeach;
-    endif;?>
-<?php
-    $msgl = UIMessage::getWarningMessages();
-    if($msgl != NULL) :
-        foreach($msgl as $msg) : ?>
-<div class="alert alert-warning">
-<strong><?php echo lang('label-warning'); ?></strong> <?php echo $msg; ?>
-</div>
-<?php
-    endforeach;
-    endif;?>
-<?php
-    $msgl = UIMessage::getSuccessMessages();
-    if($msgl != NULL) :
-        foreach($msgl as $msg) : ?>
-<div class="alert alert-success">
-<strong><?php echo lang('label-success'); ?></strong> <?php echo $msg; ?>
-</div>
-<?php
-    endforeach;
-    endif;?>
-<?php
-    $msgl = UIMessage::getInfoMessages();
-    if($msgl != NULL) :
-        foreach($msgl as $msg) : ?>
-<div class="alert alert-info">
-<strong><?php echo lang('label-info'); ?></strong> <?php echo $msg; ?>
-</div>
-<?php
-    endforeach;
-    endif;?>
-<?php
-    UIMessage::clearAll();
-    ?>
+<?php echo form_open('jobsrch/' . $controller_name, array('id' => 'form')); ?>
+<input type="hidden" name="action" id="action">
+<div id="content">
