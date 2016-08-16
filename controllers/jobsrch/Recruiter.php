@@ -78,11 +78,19 @@
             $_SESSION[$this->sessionKey('address')] = new Address_entity();
         }
         
-        protected function preSave($detail) {
+        protected function loadExtraFromData($data) {
             
             // Load address from input data.
             $address = $_SESSION[$this->sessionKey('address')];
             $address = $this->address_model->loadFromData($this->input->post(), $address);
+            
+            // Store in session so the detail page can be repopulated even on error.
+            $_SESSION[$this->sessionKey('address')] = $address;
+            
+            return $address;
+        }
+        
+        protected function preSave($detail, $extra) {
             
             // Check for duplicate address.
             $address = $this->address_library->checkDuplicate($address);
@@ -102,10 +110,6 @@
             
             // Store address ID in recruiter entity
             $detail->address_id = $addr->id;
-            
-            // Update address in list screen
-            $addrList =& $_SESSION[$this->sessionKey('addrList')];
-            $addrList[$detail->id] = $this->address_library->oneLineDescription($addr);
             
             return $detail;
         }

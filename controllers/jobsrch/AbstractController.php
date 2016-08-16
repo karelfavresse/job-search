@@ -354,11 +354,12 @@
             
             $detail = $_SESSION[$this->sessionKey('detail')];
             $detail = $this->getModel()->loadFromData($this->input->post(), $detail);
+            $extra = $this->loadExtraFromData($this->input->post());
             if ( ! $useValidation OR $this->form_validation->run() !== FALSE)
             {
                 $this->db->trans_start();
                 
-                $d = $this->preSave($detail);
+                $d = $this->preSave($detail, $extra);
                 if($d === FALSE) {
                     UIMessage::addError('Save aborted');
                 } else {
@@ -373,6 +374,7 @@
                     } else {
                         $detail = $d;
                         UIMessage::addInfo($this->getName() . ' saved.');
+                        $this->postSave($detail, $extra);
                     }
                 }
                 
@@ -382,11 +384,30 @@
         }
         
         /**
+         * Load additional data not contained in the main entity. Return whatever was loaded. This will later be passed to the preSave() and postSave() methods.
+         * @param array $data input from request
+         * @return mixed the extra data loaded from the $data parameter, or NULL if no extra data applicable.
+         */
+        protected function loadExtraFromData($data) {
+            return NULL;
+        }
+        
+        /**
          * Perform any actions before the actual save takes place.
-         * @aparam Object $detail the detail about to be saved
+         * @param Object $detail the detail about to be saved
+         * @param mixed $extra extra data loaded by the loadExtraFromData() method, or NULL if no such data was loaded.
          * @return mixed Either the object to be saved if OK, otherwise FALSE (don't save). If returning FALSE, this method should set any error message indicating the reason (UIMessage).
          */
-        protected function preSave($detail) {
+        protected function preSave($detail, $extra) {
+            // NOOP
+        }
+        
+        /**
+         * Perform any actions after the actual save takes place.
+         * @param Object $detail the detail that was saved
+         * @param mixed $extra extra data loaded by the loadExtraFromData() method.
+         */
+        protected function postSave($detail, $extra) {
             // NOOP
         }
         
