@@ -93,7 +93,7 @@
         protected function preSave($detail, $extra) {
             
             // Check for duplicate address.
-            $address = $this->address_library->checkDuplicate($address);
+            $address = $this->address_library->checkDuplicate($extra);
             
             // Save the address first, set new ID in $detail.
             if( ! isset($address->id) )
@@ -121,19 +121,18 @@
             $idArrayReverse = array();
             foreach( $data as $rec ) {
                 $idArray[$rec->id] = $rec->address_id;
-                $idArrayReverse[$rec->address_id] = $rec->id;
             }
             $addresses = $this->address_model->getList($idArray);
             $addrList = array();
             foreach ( $addresses as $addr ) {
-                $addrList[$idArrayReverse[$addr->id]] = $this->address_library->oneLineDescription($addr);
+                $addrList[$addr->id] = $this->address_library->oneLineDescription($addr);
             }
             
             $list_data = array();
             foreach($data as $obj) {
                 $list_entry = array('id' => $obj->id, 'name' => default_if_null($obj->name, ''), 'contactname' => default_if_null($obj->contact_name, ''), 'emailaddress' => default_if_null($obj->email_address, ''), 'phonenumber' => default_if_null($obj->phone_number, ''), 'address' => '', 'action' => '');
-                if(isset($addrList[$obj->id])) {
-                    $list_entry['address'] = $addrList[$obj->id];
+                if(isset($addrList[$obj->address_id])) {
+                    $list_entry['address'] = $addrList[$obj->address_id];
                 }
                 $list_entry['action'] = '<a href="#" onclick="$(\'#detail_id\').val(\'' . $obj->id . '\'); doAction(\'startEdit\');"  title="' . lang('button-tip-edit-recruiter') . '"><span class="glyphicon glyphicon-pencil"></span></a>';
                 $list_data[] = $list_entry;

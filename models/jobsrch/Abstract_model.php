@@ -101,6 +101,9 @@
          */
         public function getList($idArray) {
             
+            if ( empty ( $idArray ) )
+                return array();
+            
             $this->db->from($this->tableName());
             $this->db->where_in('id', $idArray);
             

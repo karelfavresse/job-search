@@ -24,8 +24,7 @@
             
             // Check if the address exists by searching for it.
             $crit = new Address_criteria($this->CI->address_model->toData($address, FALSE));
-            $crit->maxrows = 1;
-            $result = $this->CI->address_model->search($crit);
+            $result = $this->CI->address_model->search($crit, 0, 1);
             
             // If no address found, return the address parameter itself. Unset the ID (if set) so a new address will be created.
             if(empty($result)) {

@@ -34,6 +34,7 @@
             $this->toDataAttribute($entity, 'email_address', $data);
             $this->toDataAttribute($entity, 'contact_name', $data);
             $this->toDataAttribute($entity, 'address_id', $data);
+            $this->toDataAttribute($entity, 'phone_number', $data);
             
             return $data;
         }
@@ -47,6 +48,7 @@
             $this->loadAttributeFromData($data, 'email_address', $entity);
             $this->loadAttributeFromData($data, 'contact_name', $entity);
             $this->loadAttributeFromData($data, 'address_id', $entity);
+            $this->loadAttributeFromData($data, 'phone_number', $entity);
 
             return $entity;
         }
