@@ -27,6 +27,7 @@
     <script type="text/javascript">
         $(document).ready(function() {
             $('#list').DataTable({
+                                 "lengthMenu" : [[5,10,25,50,100],[5,10,25,50,100]],
                                  "pagingType" : "full_numbers",
                                  "searching" : false,
                                  "processing" : true,

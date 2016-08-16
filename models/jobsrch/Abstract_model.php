@@ -41,7 +41,7 @@
             }
             
             if($start > 0) {
-                if( ! $this->data_seek($start) ) {
+                if( ! $query->data_seek($start) ) {
                     // Not supported by database driver.
                     // Read all rows until $start is reached. Wastes resources, but currently no other way to stay DB independent...
                     for($i = 0; $i < $start ; $i++)
