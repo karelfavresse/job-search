@@ -19,7 +19,7 @@
             <div class="collapse navbar-collapse" id="toolbar">
                 <ul class="nav navbar-nav">
 <?php if ($can_delete) : ?>
-                    <li><button type="button" class="btn btn-danger navbar-btn <?php echo $button_state['delete']; ?>" onclick="$('#deleteConfirmBox').modal();" title="<?php echo lang('button-tip-delete-recruiter'); ?>" <?php echo $button_state['delete']; ?>><span class="glyphicon glyphicon-trash"></span> <?php echo lang('button-title-delete'); ?></button></li>
+                    <li><button type="button" class="btn btn-danger navbar-btn <?php echo $button_state['delete']; ?>" onclick="$('#deleteConfirmBox').modal('show');" title="<?php echo lang('button-tip-delete-recruiter'); ?>" <?php echo $button_state['delete']; ?>><span class="glyphicon glyphicon-trash"></span> <?php echo lang('button-title-delete'); ?></button></li>
 <?php endif; ?>
                 </ul>
             </div>
@@ -69,6 +69,15 @@
 <?php endif; ?>
     </div>
 
+<input type="hidden" name="do_delete" id="do_delete"/>
+<script type="text/javascript">
+$(document).ready(function() {
+                  $("#deleteConfirmBox").on('hidden.bs.modal', function(){
+                                            if($("#do_delete").val()=="true")
+                                                doAction('delete');
+                                            });
+                  });
+</script>
     <div id="deleteConfirmBox" class="modal fade" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -79,8 +88,8 @@
                     <p><?php echo str_replace(array('{name}', '{type}'), array($detail->name, lang("type-$type")), lang('dialog-text-delete')); ?>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" onclick="doAction('delete')"><span class="glyphicon glyphicon-trash"></span> <?php echo lang('button-title-delete'); ?></button>
-                    <button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> <?php echo lang('button-title-cancel'); ?></button>
+                    <button type="button" class="btn btn-danger" id="confirmDeleteButton" data-dismiss="modal" onclick="$('#do_delete').val('true');"><span class="glyphicon glyphicon-trash"></span> <?php echo lang('button-title-delete'); ?></button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal" onclick="$('#do_delete').val('false');"><span class="glyphicon glyphicon-remove"></span> <?php echo lang('button-title-cancel'); ?></button>
                 </div>
             </div>
         </div>

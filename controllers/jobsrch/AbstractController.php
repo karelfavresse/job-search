@@ -61,6 +61,16 @@
          */
         protected abstract function urlSegment();
         
+        /**
+         * Return an array containing the data for the list.
+         */
+        protected abstract function list_data($data);
+        
+        /**
+         * Returns the attribute name for the table column in the list.
+         */
+        protected abstract function attribute_for_column($column);
+        
         /* ====== End of abstract methods ====== */
         
         protected function setLevel($level) {
@@ -214,21 +224,16 @@
             $_SESSION[$this->sessionKey('crit')] = $crit;
             
             if ( ! $useValidation OR $this->form_validation->run() !== FALSE)
-            {
-                $this->doSearch();
                 $this->setLevel(self::LEVEL_LIST);
-            }
         }
         
         /**
-         * Sets up validation rules for criteria. Default implementation sets a single rule for the 'maxrows' input element.
+         * Sets up validation rules for criteria. 
          * @return TRUE if validation is to be used, FALSE if not.
          */
         protected function setupCriteriaValidationRules() {
             
-            $this->form_validation->set_rules('maxrows', lang('label-search-maxrows'), 'trim|required|integer');
-            
-            return TRUE;
+            return FALSE;
         }
         
         /**
@@ -249,7 +254,6 @@
             switch($level) {
                 case self::LEVEL_SEARCH :
                     unset($_SESSION[$this->sessionKey('detail')]);
-                    unset($_SESSION[$this->sessionKey('list')]);
                     break;
                 case self::LEVEL_LIST :
                     unset($_SESSION[$this->sessionKey('detail')]);
@@ -262,25 +266,50 @@
          * Reloads data from the database using the search criteria stored in the session. Shows the list screen
          */
         public function refresh() {
-            $this->doSearch();
+            // Done automatically by server side datatables
         }
         
         /**
          * Perform the actual search and set the list.
+         * Is now done in listdata() using server side datatable processing
          */
         protected function doSearch() {
             
-            if(isset($_SESSION[$this->sessionKey('crit')]))
-                $rows = $this->recruiter_model->search($_SESSION[$this->sessionKey('crit')]);
-            else {
+            if( ! isset($_SESSION[$this->sessionKey('crit')])) {
                 $_SESSION[$this->sessionKey('crit')] = $this->createCriteria();
-                $rows = array();
             }
-            $list = array();
-            foreach ($rows as $entry) {
-                $list[$entry->id] = $entry;
+        }
+        
+        /**
+         * Used when paging the DataTable. Start and row count are included in the POST parameters.
+         */
+        public function listdata() {
+
+            // Extract parameters from POST (start, limit, draw ID).
+            $draw = (integer)$this->input->post('draw');
+            $start = (integer)$this->input->post('start');
+            $length = (integer)$this->input->post('length');
+            $columns = $this->input->post('columns');
+            $order = $this->input->post('order');
+            
+            $crit = $_SESSION[$this->sessionKey('crit')];
+            
+            // Determine on which columns to sort
+            $sort = array();
+            foreach($order as $oe) {
+                $sort[] = array('column' => $this->attribute_for_column($columns[$oe['column']]['data']), 'dir' => $oe['dir']);
+                if ( $oe['dir'] !== 'asc' && $oe['dir'] !== 'desc' )
+                    $oe['dir'] = 'asc';
             }
-            $_SESSION[$this->sessionKey('list')] = $list;
+            
+            // Load the data as required
+            $totalRows = 0;
+            $data = $this->getModel()->search($crit, $start, $length, $sort, $totalRows);
+            
+            // Turn found data into JSON and return
+            $json = array('draw' => $draw, 'recordsTotal' => $totalRows, 'recordsFiltered' => $totalRows, 'data' => $this->list_data($data));
+            
+            echo json_encode($json);
         }
         
         /**
@@ -343,7 +372,6 @@
                         UIMessage::addError('Failed to save ' . $this->getName() );
                     } else {
                         $detail = $d;
-                        $_SESSION[$this->sessionKey('list')][$detail->id] = $detail;
                         UIMessage::addInfo($this->getName() . ' saved.');
                     }
                 }
@@ -373,8 +401,6 @@
             if($this->getModel()->delete($detail)) {
                 unset($_SESSION[$this->sessionKey('detail')]);
                 UIMessage::addInfo($this->getName() . ' "' . $detail->name . '" deleted.');
-                $list =& $_SESSION[$this->sessionKey('list')];
-                unset($list[$detail->id]);
                 $this->setLevel(self::LEVEL_LIST);
             } else {
                 UIMessage::addError('Failed to delete ' . $this->getName() );
@@ -412,17 +438,15 @@
             
             $data = [];
             
-            $data['list'] = $_SESSION[$this->sessionKey('list')];
-
             $data['can_create'] = $this->can_create();
-        
+            
             $this->set_list_data($data);
             
             $this->loadListPanel($data);
         }
         
         /**
-         * Set the list data for the view. The 'title' and 'list' entries have already been set.
+         * Set the list data for the view. The 'title' entry has already been set.
          * @param array &$data data array sent to the view.
          */
         protected function set_list_data(&$data) {

@@ -10,6 +10,7 @@
             $this->load->model('jobsrch/recruiter_model');
             $this->load->library('jobsrch/Address_library');
             $this->load->model('jobsrch/address_model');
+            $this->load->helper('jobsrch/value');
         }
         
         protected function createCriteria($input = NULL) {
@@ -109,15 +110,12 @@
             return $detail;
         }
         
-        protected function doSearch() {
-            
-            // Let parent search for recruiters.
-            parent::doSearch();
+        protected function list_data($data) {
             
             // Load address oneliners for found recruiters. Store with the same ID as the recruiters list.
             $idArray = array();
             $idArrayReverse = array();
-            foreach( $_SESSION[$this->sessionKey('list')] as $rec ) {
+            foreach( $data as $rec ) {
                 $idArray[$rec->id] = $rec->address_id;
                 $idArrayReverse[$rec->address_id] = $rec->id;
             }
@@ -127,16 +125,31 @@
                 $addrList[$idArrayReverse[$addr->id]] = $this->address_library->oneLineDescription($addr);
             }
             
-            // Store address list in session
-            $_SESSION[$this->sessionKey('addrList')] = $addrList;
+            $list_data = array();
+            foreach($data as $obj) {
+                $list_entry = array('id' => $obj->id, 'name' => default_if_null($obj->name, ''), 'contactname' => default_if_null($obj->contact_name, ''), 'emailaddress' => default_if_null($obj->email_address, ''), 'phonenumber' => default_if_null($obj->phone_number, ''), 'address' => '', 'action' => '');
+                if(isset($addrList[$obj->id])) {
+                    $list_entry['address'] = $addrList[$obj->id];
+                }
+                $list_entry['action'] = '<a href="#" onclick="$(\'#detail_id\').val(\'' . $obj->id . '\'); doAction(\'startEdit\');"  title="' . lang('button-tip-edit-recruiter') . '"><span class="glyphicon glyphicon-pencil"></span></a>';
+                $list_data[] = $list_entry;
+            }
+            
+            return $list_data;
         }
         
-        protected function set_list_data(&$data) {
+        protected function attribute_for_column($column) {
             
-            parent::set_list_data($data);
+            switch($column) {
+                case 'contactname' :
+                    return 'contact_name';
+                case 'emailaddress' :
+                    return 'email_address';
+                case 'phonenumber' :
+                    return 'phone_number';
+            }
             
-            $data['addrList'] = $_SESSION[$this->sessionKey('addrList')];
-            
+            return $column;
         }
         
         protected function createAuthCode() {

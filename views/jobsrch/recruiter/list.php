@@ -26,7 +26,24 @@
     <input name="detail_id" id="detail_id" type="hidden"></input>
     <script type="text/javascript">
         $(document).ready(function() {
-            $('#list').DataTable();
+            $('#list').DataTable({
+                                 "pagingType" : "full_numbers",
+                                 "searching" : false,
+                                 "processing" : true,
+                                 "serverSide" : true,
+                                 "ajax" : {
+                                    "url" : $("#form").attr('action') + '/listdata',
+                                    "type" : "POST"
+                                 },
+                                 "columns" : [
+                                    {"data" : "name"},
+                                    {"data" : "contactname"},
+                                    {"data" : "address", "orderable" : false},
+                                    {"data" : "emailaddress", "orderable" : false},
+                                    {"data" : "phonenumber"},
+                                    {"data" : "action", "orderable" : false}
+                                 ]
+            });
         } );
     </script>
     <table id="list" class="table table-striped table-bordered table-responsive" width="100%">
@@ -40,24 +57,4 @@
                 <th><?php echo lang('list-header-action'); ?></th>
             </tr>
         </thead>
-<?php if ( isset($list) ) : ?>
-        <tbody>
-<?php foreach ($list as $entry) : ?>
-            <tr>
-                <td><?php echo $entry->name; ?></td>
-                <td><?php echo $entry->contact_name; ?></td>
-<?php if ( isset ( $addrList[$entry->id] ) ) : ?>
-                <td><?php echo $addrList[$entry->id]; ?></td>
-<?php else : ?>
-                <td></td>
-<?php endif; ?>
-                <td><?php echo $entry->email_address; ?></td>
-                <td><?php echo $entry->phone_number; ?></td>
-                <td>
-                    <a href="#" onclick="$('#detail_id').val('<?php echo $entry->id;?>');doAction('startEdit');"  title="<?php echo lang('button-tip-edit-recruiter'); ?>"><span class="glyphicon glyphicon-pencil"></span></a>
-                </td>
-            </tr>
-<?php endforeach; ?>
-        </tbody>
-<?php endif; ?>
     </table>

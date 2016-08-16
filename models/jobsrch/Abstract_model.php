@@ -11,24 +11,53 @@
         
         protected abstract function addCriteria($crit);
         
-        protected abstract function addOrderBy($crit);
-        
         protected abstract function entityName();
         
         public function __construct() {
             $this->load->database();
         }
         
-        public function search($crit) {
+        public function search($crit, $start = -1, $length = 0, $sort = NULL, &$totalRows = NULL) {
             
             $this->db->from($this->tableName());
             $this->addCriteria($crit);
-            $this->addOrderBy($crit);
-            $this->db->limit($crit->maxrows);
+            if($start >= 0 and $length > 0 )
+                $this->db->limit($start * $length);
+            if($sort !== NULL) {
+                foreach($sort as $sorte) {
+                    $this->db->order_by($sorte['column'], $sorte['dir']);
+                }
+            }
             
             $query = $this->db->get();
             
-            return $query->custom_result_object($this->entityName());
+            if($totalRows !== NULL)
+                $totalRows = $query->num_rows();
+            
+            if($length < 1) {
+                $length = $query->num_rows();
+                if($start > 0)
+                    $length -= $start;
+            }
+            
+            if($start > 0) {
+                if( ! $this->data_seek($start) ) {
+                    // Not supported by database driver.
+                    // Read all rows until $start is reached. Wastes resources, but currently no other way to stay DB independent...
+                    for($i = 0; $i < $start ; $i++)
+                        $query->unbuffered_row();
+                }
+            }
+            
+            $data = array();
+            for($i = 0 ; $i < $length ; $i++) {
+                $obj = $query->unbuffered_row($this->entityName());
+                if ( $obj === FALSE )
+                    break;
+                $data[] = $obj;
+            }
+            
+            return $data;
         }
         
         public function insert($detail) {

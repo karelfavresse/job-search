@@ -21,10 +21,6 @@
                 $this->db->like('name', $crit->name);
         }
         
-        protected function addOrderBy($crit) {
-            $this->db->order_by('name', 'ASC');
-        }
-        
         protected function entityName() {
             return 'Recruiter_entity';
         }

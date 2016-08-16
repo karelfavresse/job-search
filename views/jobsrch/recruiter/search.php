@@ -27,9 +27,3 @@
         <input type="text" class="form-control" id="name" name="name" value="<?php echo $crit->name ;?>">
     </div>
 </div>
-<div class="row form-group">
-    <?php echo lang('label-search-maxrows', 'maxrows', array('class' => 'control-label col-sm-3 col-md-1')); ?>
-    <div class="col-sm-2 col-xs-12">
-        <input type="text" class="form-control" id="maxrows" name="maxrows" value="<?php echo $crit->maxrows ;?>">
-    </div>
-</div>
