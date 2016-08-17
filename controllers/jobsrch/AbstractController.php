@@ -225,7 +225,8 @@
             
             if ( ! $useValidation OR $this->form_validation->run() !== FALSE) {
                 $_SESSION[$this->sessionKey('list_display_start')] = 0;
-                $_SESSION[$this->sessionKey('list_page_length')] = 10;
+                if ( ! isset($_SESSION[$this->sessionKey('list_page_length')]) )
+                    $_SESSION[$this->sessionKey('list_page_length')] = 10;
                 if ( ! isset($_SESSION[$this->sessionKey('list_order')]) )
                     $_SESSION[$this->sessionKey('list_order')] = array(array(0, 'asc'));
                 $this->setLevel(self::LEVEL_LIST);
