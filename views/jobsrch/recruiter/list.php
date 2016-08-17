@@ -29,6 +29,9 @@
             $('#list').DataTable({
                                  "lengthMenu" : [[5,10,25,50,100],[5,10,25,50,100]],
                                  "pagingType" : "full_numbers",
+                                 "pageLength" : <?php echo $list_page_length; ?>,
+                                 "displayStart" : <?php echo $list_display_start; ?>,
+                                 "order" : <?php echo json_encode($list_order); ?>,
                                  "searching" : false,
                                  "processing" : true,
                                  "serverSide" : true,

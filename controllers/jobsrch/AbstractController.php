@@ -223,8 +223,13 @@
             $crit = $this->createCriteria($this->input->post());
             $_SESSION[$this->sessionKey('crit')] = $crit;
             
-            if ( ! $useValidation OR $this->form_validation->run() !== FALSE)
+            if ( ! $useValidation OR $this->form_validation->run() !== FALSE) {
+                $_SESSION[$this->sessionKey('list_display_start')] = 0;
+                $_SESSION[$this->sessionKey('list_page_length')] = 10;
+                if ( ! isset($_SESSION[$this->sessionKey('list_order')]) )
+                    $_SESSION[$this->sessionKey('list_order')] = array(array(0, 'asc'));
                 $this->setLevel(self::LEVEL_LIST);
+            }
         }
         
         /**
@@ -270,17 +275,6 @@
         }
         
         /**
-         * Perform the actual search and set the list.
-         * Is now done in listdata() using server side datatable processing
-         */
-        protected function doSearch() {
-            
-            if( ! isset($_SESSION[$this->sessionKey('crit')])) {
-                $_SESSION[$this->sessionKey('crit')] = $this->createCriteria();
-            }
-        }
-        
-        /**
          * Used when paging the DataTable. Start and row count are included in the POST parameters.
          */
         public function listdata() {
@@ -292,15 +286,22 @@
             $columns = $this->input->post('columns');
             $order = $this->input->post('order');
             
+            $_SESSION[$this->sessionKey('list_display_start')] = $start;
+            $_SESSION[$this->sessionKey('list_page_length')] = $length;
+
             $crit = $_SESSION[$this->sessionKey('crit')];
             
             // Determine on which columns to sort
             $sort = array();
+            $list_order = array();
             foreach($order as $oe) {
+                // Column in order array is the index to the column, but the model needs the attribute name.
                 $sort[] = array('column' => $this->attribute_for_column($columns[$oe['column']]['data']), 'dir' => $oe['dir']);
                 if ( $oe['dir'] !== 'asc' && $oe['dir'] !== 'desc' )
                     $oe['dir'] = 'asc';
+                $list_order[] = array($oe['column'], $oe['dir']);
             }
+            $_SESSION[$this->sessionKey('list_order')] = $list_order;
             
             // Load the data as required
             $totalRows = 0;
@@ -461,6 +462,10 @@
             
             $data['can_create'] = $this->can_create();
             
+            $data['list_display_start'] = $_SESSION[$this->sessionKey('list_display_start')];
+            $data['list_page_length'] = $_SESSION[$this->sessionKey('list_page_length')];
+            $data['list_order'] = $_SESSION[$this->sessionKey('list_order')];
+            
             $this->set_list_data($data);
             
             $this->loadListPanel($data);
@@ -494,7 +499,7 @@
             
             $data['can_update'] = $this->can_update();
             $data['can_delete'] = $this->can_delete();
-
+            
             $this->set_detail_data($data);
             
             $this->detailButtonState($data, $data['detail']);
