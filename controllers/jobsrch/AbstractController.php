@@ -12,9 +12,11 @@
         
         public function __construct() {
             parent::__construct();
+            
             $this->loadModel();
             $this->load->helper('url_helper');
             $this->load->library('session');
+            $this->load->library('jobsrch/Authentication_library');
             $this->load->library('jobsrch/Authorization_library');
             Language::setup();
         }
@@ -151,6 +153,8 @@
          */
         public function index() {
             
+            $this->authentication_library->check('jobsrch/'. $this->urlSegment());
+
             $this->load->helper('form');
             
             // Perform action if specified
@@ -193,9 +197,28 @@
         }
         
         /**
+         * Called when user called our URL with an unallowed segment. This method redirects to our main resource page.
+         */
+        public function redirect() {
+            
+            if($this->input->is_ajax_request()) {
+                header("HTTP/1.1 401 Unauthorized");
+                echo '<script>window.location = ' . site_url('jobsrch/') . $this->urlSegment() . ';</script>';
+            }
+            else {
+                redirect(site_url('jobsrch/') . $this->urlSegment());
+            }
+        }
+        
+        /**
          * Creates a blank Recruiter object, then renders the detail screen.
          */
         public function create() {
+            
+            if( ! $this->can_create() ) {
+                $this->redirect();
+                exit;
+            }
             
             $_SESSION[$this->sessionKey('detail')] = $this->createEntity();
             
@@ -280,6 +303,14 @@
          */
         public function listdata() {
 
+            // Calling this method is only allowed through Ajax / POST
+            if ( ! $this->input->is_ajax_request() || empty ( $this->input->post()) ) {
+                $this->redirect();
+                exit;
+            }
+            
+            $this->authentication_library->check('jobsrch/'. $this->urlSegment());
+
             // Extract parameters from POST (start, limit, draw ID).
             $draw = (integer)$this->input->post('draw');
             $start = (integer)$this->input->post('start');
@@ -295,13 +326,14 @@
             // Determine on which columns to sort
             $sort = array();
             $list_order = array();
-            foreach($order as $oe) {
-                // Column in order array is the index to the column, but the model needs the attribute name.
-                $sort[] = array('column' => $this->attribute_for_column($columns[$oe['column']]['data']), 'dir' => $oe['dir']);
-                if ( $oe['dir'] !== 'asc' && $oe['dir'] !== 'desc' )
-                    $oe['dir'] = 'asc';
-                $list_order[] = array($oe['column'], $oe['dir']);
-            }
+            if($order !== NULL)
+                foreach($order as $oe) {
+                    // Column in order array is the index to the column, but the model needs the attribute name.
+                    $sort[] = array('column' => $this->attribute_for_column($columns[$oe['column']]['data']), 'dir' => $oe['dir']);
+                    if ( $oe['dir'] !== 'asc' && $oe['dir'] !== 'desc' )
+                        $oe['dir'] = 'asc';
+                    $list_order[] = array($oe['column'], $oe['dir']);
+                }
             $_SESSION[$this->sessionKey('list_order')] = $list_order;
             
             // Load the data as required
@@ -350,6 +382,11 @@
          */
         public function save() {
             
+            if( ! $this->can_update() ) {
+                $this->redirect();
+                exit;
+            }
+
             $this->load->library('form_validation');
             
             $useValidation = $this->setupDetailValidationRules();
@@ -417,6 +454,11 @@
          * Deletes the current detail and shows the list screen again.
          */
         public function delete() {
+            
+            if( ! $this->can_delete() ) {
+                $this->redirect();
+                exit;
+            }
             
             $this->db->trans_start();
             

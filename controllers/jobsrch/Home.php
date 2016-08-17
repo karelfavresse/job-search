@@ -9,8 +9,12 @@
         public function __construct()
         {
             parent::__construct();
+            
+            
             $this->load->helper('url_helper');
             $this->load->library('session');
+            $this->load->library('jobsrch/Authentication_library');
+            $this->authentication_library->check('jobsrch');
             Language::setup();
         }
 

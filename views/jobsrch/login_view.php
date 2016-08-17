@@ -20,3 +20,5 @@
             <button type="submit" class="btn btn-primary" onclick="$('#action').val('login')"><span class="glyphicon glyphicon-log-in"></span> <?php echo lang('button-title-login'); ?></button>
         </div>
     </div>
+
+<p><?php echo $auth_redirect_after_login; ?>

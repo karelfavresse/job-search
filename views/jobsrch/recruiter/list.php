@@ -37,7 +37,14 @@
                                  "serverSide" : true,
                                  "ajax" : {
                                     "url" : $("#form").attr('action') + '/listdata',
-                                    "type" : "POST"
+                                    "type" : "POST",
+                                    "error" : function(httpObj,txtStatus) {
+                                        if(httpObj.status == 401) {
+                                            document.location.href = '<?php echo site_url('jobsrch/login'); ?>';
+                                        } else {
+                                            alert("Error communicating with server : \n" + txtStatus + "\nHTTP status : " + httpObj.status);
+                                        }
+                                    }
                                  },
                                  "columns" : [
                                     {"data" : "name"},

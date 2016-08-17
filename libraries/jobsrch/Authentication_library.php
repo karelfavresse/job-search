@@ -8,21 +8,55 @@
         /**
          * Checks whether the session has a logged in user. If not, the page is redirected to the login page. If this check is run on the login page, the redirect is not done.
          */
-        public static function check() {
+        public function check($fromPage = NULL) {
             
             // Logged in ?
             if(self::is_logged_in())
                 return;
             
             // Login page ?
-            $CI =& get_instance();
-            $CI->load->helper('url');
+            $this->CI =& get_instance();
+            $this->CI->load->helper('url');
             if(uri_string() === 'jobsrch/login')
                 return;
             
+            // Remove any remaining user authentication
+            $this->clear();
+            // Destroy the session
+            session_unset();
+            session_destroy();
+            $_SESSION = array();
+            session_start();
+            // remove session cookie
+            if (ini_get("session.use_cookies")) {
+                $params = session_get_cookie_params();
+                setcookie(session_name(), '', time() - 42000,
+                          $params["path"], $params["domain"],
+                          $params["secure"], $params["httponly"]
+                          );
+            }
+            
+            // Using the session to store the url to go to after login will not work any more because we just destroyed the session and its cookie.
+            // But if we don't destroy the session as above, then it sticks around and sometimes causes weird problems. E.g., clicking 'New' on a list page when not authenticated any more caused the detail screen to be shown after login, but executing Back resulted in an error.
             // Not logged in. Store the requested page and redirect to the login page.
-            $_SESSION['auth_redirect_after_login'] = uri_string();
-            redirect(site_url('jobsrch/login'));
+            if($this->CI->input->is_ajax_request()) {
+            /*    if($fromPage === null)
+                    // Don't redirect to Ajax URL, won't work properly
+                    $_SESSION['auth_redirect_after_login'] = 'jobsrch';
+                else
+                    $_SESSION['auth_redirect_after_login'] = $fromPage;
+             */
+                header("HTTP/1.1 401 Unauthorized");
+                echo '<script>window.location = ' . site_url('jobsrch/login') . ';</script>';
+            }
+            else {
+                /*
+                if($fromPage === NULL)
+                    $fromPage = uri_string();
+                $_SESSION['auth_redirect_after_login'] = $fromPage;
+                 */
+                redirect(site_url('jobsrch/login'));
+            }
         }
         
         public static function current_user() {

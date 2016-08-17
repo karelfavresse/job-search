@@ -58,6 +58,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 $route['jobsrch/login'] = 'jobsrch/login';
 $route['jobsrch/(:any)/listdata'] = 'jobsrch/$1/listdata';
+$route['jobsrch/(:any)/(:any)'] = 'jobsrch/$1/redirect';
 $route['jobsrch/(:any)'] = 'jobsrch/$1';
 $route['jobsrch'] = 'jobsrch/home';
 $route['news/create'] = 'news/create';

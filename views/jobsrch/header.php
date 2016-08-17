@@ -2,8 +2,6 @@
 <?php
     // Do login check
     require_once dirname(dirname(__DIR__)) . '/libraries/jobsrch/Authentication_library.php';
-    Authentication_library::check();
-    
     require_once dirname(dirname(__DIR__)) . '/libraries/jobsrch/Authorization_library.php';
 ?>
 <html>
@@ -31,7 +29,9 @@
                        $content.empty();
                        $content.append(data);
                     }
-                );
+                       ).fail(function (){
+                              document.location.href = '<?php echo site_url('jobsrch/login'); ?>';
+                              });
             }
         </script>
     </head>

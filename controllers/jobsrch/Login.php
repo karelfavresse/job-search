@@ -74,6 +74,10 @@
             $data = [];
             $data['title'] = lang('title-login');
             $data['controller_name'] = 'login';
+            if(isset($_SESSION['auth_redirect_after_login']))
+                $data['auth_redirect_after_login'] = $_SESSION['auth_redirect_after_login'];
+            else
+                $data['auth_redirect_after_login'] = '';
             
             $ln = $this->input->post('name');
             if($ln === NULL)
