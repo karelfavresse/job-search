@@ -17,10 +17,19 @@
         
         protected function addCriteria($crit) {
             
-            if( ! empty ($crit->name))
-                $this->db->like('name', $crit->name);
-            if ( ! empty ( $crit->contact_name))
-                $this->db->like('contact_name', $crit->name);
+            $this->_add_crit($crit, 'name');
+            $this->_add_crit($crit, 'contact_name');
+        }
+        
+        private function _add_crit($crit, $attrName) {
+            
+            if ( ! empty($crit->{$attrName}) ) {
+                if ( $crit->match_any )
+                    $this->db->or_like('upper('.$attrName.')', strtoupper($crit->{$attrName}));
+                else
+                    $this->db->like('upper('.$attrName.')', strtoupper($crit->{$attrName}));
+            }
+            
         }
         
         protected function entityName() {

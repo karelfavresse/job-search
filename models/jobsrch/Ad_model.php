@@ -28,7 +28,7 @@
         private function addCriteriaAttribute($crit, $attributeName) {
             
             if ( ! empty($crit->{$attributeName}) )
-                $this->db->like($attributeName, $crit->{$attributeName});
+                $this->db->like('upper('.$attributeName.')', strtoupper($crit->{$attributeName}));
         }
         
         protected function entityName() {

@@ -191,6 +191,8 @@
             // Search recruiters on contact name, returning at most 'pagelength' rows starting from 'page' * 'pagelength'.
             $crit = new Recruiter_criteria();
             $crit->contact_name = $q;
+            $crit->name = $q;
+            $crit->match_any = TRUE;
             $totalRows = 0;
             $recruiters = $this->recruiter_model->search($crit, $page * $pagelength, $pagelength, array(array('column'=>'contact_name', 'dir' => 'asc')), $totalRows);
             

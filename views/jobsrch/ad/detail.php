@@ -35,7 +35,6 @@ $(document).ready(function() {
                                     url: $("#form").attr('action') + '/loadrecruiters',
                                                      dataType: 'json',
                                                      delay: 250,
-                                   allowClear:true,
                                                      data: function (params) {
                                                      return {
                                                      q: params.term, // search term
@@ -135,10 +134,15 @@ $(document).ready(function() {
 </div>
 </div>
 <div class="row form-group">
-    <?php echo lang('label-detail-ad-recruiter', 'recruiter', array('class' => 'control-label col-md-1 col-sm-3')); ?>
+    <?php echo lang('label-detail-ad-recruiter', 'select-recruiter', array('class' => 'control-label col-md-1 col-sm-3')); ?>
     <div class="col-sm-5 col-md-3 col-xs-12">
+    <div class="input-group select2-bootstrap-append">
         <select id="select-recruiter" name="recruiter" id="recruiter" class="form-control" >
         </select>
+        <span class="input-group-btn">
+            <button type="button" class="btn btn-default" onClick="$('#select-recruiter').val(null).trigger('change');" ><span class="glyphicon glyphicon-erase"></span></button>
+        </span>
+    </div>
     </div>
 </div>
 <?php if(isset($detail->id)) : ?>

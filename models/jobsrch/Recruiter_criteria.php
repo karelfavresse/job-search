@@ -8,11 +8,17 @@
         public $name;
         public $contact_name;
         
+        /**
+         * If TRUE, selects records for which any of the criteria is true. If FALSE, only records matching all set criteria are returned.
+         */
+        public $match_any;
+        
         public function __construct($data = array()) {
             parent::__construct($data);
             
             $this->load($data, 'name', '');
             $this->load($data, 'contact_name', '');
+            $this->load($data, 'match_any', false);
         }
         
     }
