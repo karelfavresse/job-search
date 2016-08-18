@@ -32,9 +32,6 @@
                 $this->db->where($attributeName, $crit->{$attributeName});
         }
         
-        protected function addOrderBy($crit) {
-        }
-        
         protected function entityName() {
             return 'Address_entity';
         }

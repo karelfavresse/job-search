@@ -3,11 +3,13 @@
 
     $lang['navbar-brand-name'] = 'Job Search';
     $lang['navbar-recruiterslink-name'] = 'Recruiters';
+    $lang['navbar-adslink-name'] = 'Ads';
     $lang['navbar-logout'] = 'Logout';
     
     $lang['title-home'] = 'Home';
     $lang['title-recruiters'] = 'Recruiters';
     $lang['title-login'] = 'Login';
+    $lang['title-ad'] = 'Ads';
     
     $lang['button-title-search'] = 'Search';
     $lang['button-title-reset'] = 'Reset';
@@ -28,6 +30,15 @@
     $lang['button-tip-edit-recruiter'] = 'Edit this Recruiter';
     $lang['button-tip-save-recruiter'] = 'Save change to this Recruiter';
     $lang['button-tip-delete-recruiter'] = 'Delete this Recruiter';
+    $lang['button-tip-search-ad'] = 'Search Ad';
+    $lang['button-tip-reset-ad'] = 'Reset search criteria';
+    $lang['button-tip-new-ad'] = 'Create new Ad';
+    $lang['button-tip-back-search-ad'] = 'Go back to search criteria';
+    $lang['button-tip-back-list-ad'] = 'Go back to search results';
+    $lang['button-tip-refresh-ad'] = 'Refresh search results';
+    $lang['button-tip-edit-ad'] = 'Edit this Ad';
+    $lang['button-tip-save-ad'] = 'Save change to this Ad';
+    $lang['button-tip-delete-ad'] = 'Delete this Ad';
     
     $lang['label-search-maxrows'] = 'Max. Rows';
     
@@ -56,13 +67,37 @@
     $lang['label-detail-address-zipcode'] = 'Post Code';
     $lang['label-detail-address-locality'] = 'Locality';
     $lang['label-detail-address-country'] = 'Country';
+    $lang['label-search-ad-title'] = 'Title';
+    $lang['label-search-ad-url'] = 'URL';
+    $lang['label-search-ad-vdabreference'] = 'VDAB Ref';
+    $lang['label-search-ad-company'] = 'Company';
+    $lang['label-search-ad-contactname'] = 'Contact Name';
+    $lang['label-detail-ad-title'] = 'Title';
+    $lang['label-detail-ad-company'] = 'Company';
+    $lang['label-detail-ad-contactname'] = 'Contact Name';
+    $lang['label-detail-ad-emailaddress'] = 'Email Address';
+    $lang['label-detail-ad-phonenumber'] = 'Phone Number';
+    $lang['label-detail-ad-recruiter'] = 'Recruiter';
+    $lang['label-detail-ad-id'] = 'ID';
+    $lang['label-detail-ad-version'] = 'Version';
+    $lang['label-detail-ad-vdabreference'] = 'VDAB Reference';
+    $lang['label-detail-ad-url'] = 'URL';
     
     $lang['list-header-recruiter-name'] = 'Name';
     $lang['list-header-recruiter-contactname'] = 'Contact Name';
     $lang['list-header-recruiter-address'] = 'Address';
     $lang['list-header-recruiter-emailaddress'] = 'Email Address';
     $lang['list-header-recruiter-phonenumber'] = 'Phone Number';
-    
+
+    $lang['list-header-ad-title'] = 'Name';
+    $lang['list-header-ad-company'] = 'Contact Name';
+    $lang['list-header-ad-address'] = 'Address';
+    $lang['list-header-ad-url'] = 'URL';
+    $lang['list-header-ad-vdabreference'] = 'VDAB Reference';
+    $lang['list-header-ad-recruiter'] = 'Recruiter';
+    $lang['list-header-ad-emailaddress'] = 'Email Address';
+    $lang['list-header-ad-phonenumber'] = 'Phone Number';
+
     $lang['dialog-title-delete'] = 'Delete {type}';
     
     $lang['dialog-text-delete'] = 'Delete {type} &quot;{name}&quot; ?';
@@ -71,5 +106,6 @@
     $lang['message-address-empty'] = 'Must specify either street and house number, or PO box.';
     
     $lang['type-Recruiter'] = 'Recruiter';
+    $lang['type-Ad'] = 'Ad';
 
 ?>

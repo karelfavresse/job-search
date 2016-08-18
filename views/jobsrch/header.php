@@ -49,11 +49,12 @@
                 <div class="collapse navbar-collapse" id="navbar">
 <?php if (Authentication_library::is_logged_in()) : ?>
                     <ul class="nav navbar-nav">
+<?php if (Authorization_library::is_authorized('view_ads')) : ?>
+                        <li><a href="<?php echo site_url('jobsrch/ad'); ?>"><?php echo lang('navbar-adslink-name'); ?></a></li>
+<?php endif; ?>
 <?php if (Authorization_library::is_authorized('view_recruiters')) : ?>
                         <li><a href="<?php echo site_url('jobsrch/recruiter'); ?>"><?php echo lang('navbar-recruiterslink-name'); ?></a></li>
 <?php endif; ?>
-                        <li><a href="#">Page 2</a></li>
-                        <li><a href="#">Page 3</a></li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                         <li><p class="navbar-text"><?php echo Authentication_library::current_user(); ?></p></li>

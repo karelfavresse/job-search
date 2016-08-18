@@ -2,12 +2,12 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
     
     require_once __DIR__ . '/AbstractController.php';
-    require_once dirname(dirname(__DIR__)) . '/models/jobsrch/Address_entity.php';
+    require_once dirname(dirname(__DIR__)) . '/models/jobsrch/Ad_entity.php';
     
-    class Recruiter extends AbstractController {
+    class Ad extends AbstractController {
         
         protected function loadModel() {
-            $this->load->model('jobsrch/recruiter_model');
+            $this->load->model('jobsrch/ad_model');
             $this->load->library('jobsrch/Address_library');
             $this->load->model('jobsrch/address_model');
             $this->load->helper('jobsrch/value');
@@ -16,38 +16,37 @@
         protected function createCriteria($input = NULL) {
             if ( ! isset($input) )
                 $input = array();
-            return new Recruiter_criteria($input);
+            return new Ad_criteria($input);
         }
         
         protected function getModel() {
-            return $this->recruiter_model;
+            return $this->ad_model;
         }
         
         protected function setupDetailValidationRules() {
             
-            $this->form_validation->set_rules('name', lang('label-detail-recruiter-name'), 'trim|required');
-            $this->form_validation->set_rules('contact_name', lang('label-detail-recruiter-contactname'), 'trim|required');
-            $this->form_validation->set_rules('email_address', lang('label-detail-recruiter-emailaddress'), 'trim|valid_email');
+            $this->form_validation->set_rules('title', lang('label-detail-ad-title'), 'trim|required');
+            $this->form_validation->set_rules('company', lang('label-detail-ad-company'), 'trim|required');
             
             $this->address_library->setupValidationRules();
             
             return TRUE;
         }
-    
+        
         protected function setTitle(&$data) {
-            $data['title'] = lang('title-recruiters');
+            $data['title'] = lang('title-ad');
         }
         
         protected function singularType() {
-            return 'Recruiter';
+            return 'Ad';
         }
         
         protected function createEntity() {
-            return new Recruiter_entity();
+            return new Ad_entity();
         }
         
         protected function urlSegment() {
-            return 'recruiter';
+            return 'ad';
         }
         
         protected function set_detail_data(&$data) {
@@ -60,17 +59,19 @@
         }
         
         protected function delete_name($detail) {
-            return $detail->name;
+            return $detail->title;
         }
         
         protected function startEditInternal($detail) {
             
             parent::startEditInternal($detail);
             
+            // TODO load recruiter
+            
             // Load address and store in session.
-            // If recruiter does not have an address, create a new one.
-            if(isset($detail->address_id))
-                $address = $this->address_model->get($detail->address_id);
+            // If ad does not have an address, create a new one.
+            if(isset($detail->company_address_id))
+                $address = $this->address_model->get($detail->company_address_id);
             else
                 $address = new Address_entity();
             
@@ -112,19 +113,19 @@
             // Save address in session
             $_SESSION[$this->sessionKey('address')] = $addr;
             
-            // Store address ID in recruiter entity
-            $detail->address_id = $addr->id;
+            // Store address ID in ad entity
+            $detail->company_address_id = $addr->id;
             
             return $detail;
         }
         
         protected function list_data($data) {
             
-            // Load address oneliners for found recruiters. Store with the same ID as the recruiters list.
+            // Load address oneliners for found ads. Store with the same ID as the ads list.
             $idArray = array();
             $idArrayReverse = array();
             foreach( $data as $rec ) {
-                $idArray[$rec->id] = $rec->address_id;
+                $idArray[$rec->id] = $rec->company_address_id;
             }
             $addresses = $this->address_model->getList($idArray);
             $addrList = array();
@@ -134,11 +135,12 @@
             
             $list_data = array();
             foreach($data as $obj) {
-                $list_entry = array('id' => $obj->id, 'name' => default_if_null($obj->name, ''), 'contactname' => default_if_null($obj->contact_name, ''), 'emailaddress' => default_if_null($obj->email_address, ''), 'phonenumber' => default_if_null($obj->phone_number, ''), 'address' => '', 'action' => '');
-                if(isset($addrList[$obj->address_id])) {
-                    $list_entry['address'] = $addrList[$obj->address_id];
+                $list_entry = array('id' => $obj->id, 'title' => default_if_null($obj->title, ''), 'company' => default_if_null($obj->company, ''), 'url' => default_if_null($obj->url, ''), 'vdabreference' => default_if_null($obj->vdab_reference, ''), 'contactname' => default_if_null($obj->contact_name, ''), 'emailaddress' => default_if_null($obj->email_address, ''), 'phonenumber' => default_if_null($obj->phone_number, ''), 'address' => '', 'recruiter' => '', 'action' => '');
+                if(isset($addrList[$obj->company_address_id])) {
+                    $list_entry['address'] = $addrList[$obj->company_address_id];
+                // TODO recruiter
                 }
-                $list_entry['action'] = '<a href="#" onclick="$(\'#detail_id\').val(\'' . $obj->id . '\'); doAction(\'startEdit\');"  title="' . lang('button-tip-edit-recruiter') . '"><span class="glyphicon glyphicon-pencil"></span></a>';
+                $list_entry['action'] = '<a href="#" onclick="$(\'#detail_id\').val(\'' . $obj->id . '\'); doAction(\'startEdit\');"  title="' . lang('button-tip-edit-ad') . '"><span class="glyphicon glyphicon-pencil"></span></a>';
                 $list_data[] = $list_entry;
             }
             
@@ -154,20 +156,22 @@
                     return 'email_address';
                 case 'phonenumber' :
                     return 'phone_number';
+                case 'vdabreference' :
+                    return 'vdab_reference';
             }
             
             return $column;
         }
         
         protected function createAuthCode() {
-            return 'create_recruiter';
+            return 'create_ad';
         }
         
         protected function updateAuthCode() {
-            return 'update_recruiter';
+            return 'update_ad';
         }
         
         protected function deleteAuthCode() {
-            return 'delete_recruiter';
+            return 'delete_ad';
         }
     }

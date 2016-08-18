@@ -73,6 +73,11 @@
          */
         protected abstract function attribute_for_column($column);
         
+        /**
+         * Returns the name used in the delete dialog and confirmation message.
+         */
+        protected abstract function delete_name($detail);
+        
         /* ====== End of abstract methods ====== */
         
         protected function setLevel($level) {
@@ -125,10 +130,10 @@
         }
         
         /**
-         * Returns the name of the entity being worked with. Defaults to the class name.
+         * Returns the name of the entity being worked with.
          */
         protected function getName() {
-            return get_class($this);
+            return lang('type-' . $this->singularType());
         }
         
         /**
@@ -465,7 +470,7 @@
             $detail = $_SESSION[$this->sessionKey('detail')];
             if($this->getModel()->delete($detail)) {
                 unset($_SESSION[$this->sessionKey('detail')]);
-                UIMessage::addInfo($this->getName() . ' "' . $detail->name . '" deleted.');
+                UIMessage::addInfo($this->getName() . ' "' . $this->delete_name($detail) . '" deleted.');
                 $this->setLevel(self::LEVEL_LIST);
             } else {
                 UIMessage::addError('Failed to delete ' . $this->getName() );
@@ -542,6 +547,8 @@
             
             $data['can_update'] = $this->can_update();
             $data['can_delete'] = $this->can_delete();
+            
+            $data['delete_name'] = $this->delete_name($data['detail']);
             
             $this->set_detail_data($data);
             
