@@ -6,11 +6,13 @@
     class Recruiter_criteria extends Abstract_criteria {
     
         public $name;
+        public $contact_name;
         
-        public function __construct($data) {
+        public function __construct($data = array()) {
             parent::__construct($data);
             
             $this->load($data, 'name', '');
+            $this->load($data, 'contact_name', '');
         }
         
     }

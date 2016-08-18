@@ -122,7 +122,6 @@
             
             // Load address oneliners for found recruiters. Store with the same ID as the recruiters list.
             $idArray = array();
-            $idArrayReverse = array();
             foreach( $data as $rec ) {
                 $idArray[$rec->id] = $rec->address_id;
             }

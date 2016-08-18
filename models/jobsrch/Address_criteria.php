@@ -13,7 +13,7 @@
         public $country;
         public $locality;
         
-        public function __construct($data) {
+        public function __construct($data = array()) {
             parent::__construct($data);
             
             $this->load($data, 'street', '');

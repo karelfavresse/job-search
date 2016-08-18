@@ -54,6 +54,7 @@
     $lang['list-header-action'] = 'Action';
     
     $lang['label-search-recruiter-name'] = 'Name';
+    $lang['label-search-recruiter-contactname'] = 'Contact Name';
     $lang['label-detail-recruiter-name'] = 'Name';
     $lang['label-detail-recruiter-contactname'] = 'Contact Name';
     $lang['label-detail-recruiter-emailaddress'] = 'Email Address';
@@ -90,7 +91,8 @@
     $lang['list-header-recruiter-phonenumber'] = 'Phone Number';
 
     $lang['list-header-ad-title'] = 'Name';
-    $lang['list-header-ad-company'] = 'Contact Name';
+    $lang['list-header-ad-company'] = 'Company';
+    $lang['list-header-ad-contactname'] = 'Contact Name';
     $lang['list-header-ad-address'] = 'Address';
     $lang['list-header-ad-url'] = 'URL';
     $lang['list-header-ad-vdabreference'] = 'VDAB Reference';

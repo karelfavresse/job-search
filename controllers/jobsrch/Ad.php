@@ -11,6 +11,7 @@
             $this->load->library('jobsrch/Address_library');
             $this->load->model('jobsrch/address_model');
             $this->load->helper('jobsrch/value');
+            $this->load->model('jobsrch/recruiter_model');
         }
         
         protected function createCriteria($input = NULL) {
@@ -56,6 +57,9 @@
             // Set address in data
             $data['address'] = $_SESSION[$this->sessionKey('address')];
             
+            // Set recruiter in data
+            if ( isset ($_SESSION[$this->sessionKey('recruiter')]))
+                $data['recruiter'] = $_SESSION[$this->sessionKey('recruiter')];
         }
         
         protected function delete_name($detail) {
@@ -66,7 +70,10 @@
             
             parent::startEditInternal($detail);
             
-            // TODO load recruiter
+            // Load recruiter if available
+            if(isset($detail->recruiter_id)) {
+                $_SESSION[$this->sessionKey('recruiter')] = $this->recruiter_model->get($detail->recruiter_id);
+            }
             
             // Load address and store in session.
             // If ad does not have an address, create a new one.
@@ -92,6 +99,13 @@
             // Store in session so the detail page can be repopulated even on error.
             $_SESSION[$this->sessionKey('address')] = $address;
             
+            // Load recruiter from input data
+            $recrId = $this->input->post('recruiter');
+            if($recrId === NULL)
+                unset($_SESSION[$this->sessionKey('recruiter')]);
+            else
+                $_SESSION[$this->sessionKey('recruiter')] = $this->recruiter_model->get($recrId);
+            
             return $address;
         }
         
@@ -116,35 +130,74 @@
             // Store address ID in ad entity
             $detail->company_address_id = $addr->id;
             
+            // Get recruiter ID, store in ad entity if set
+            if ( isset($_SESSION[$this->sessionKey('recruiter')]))
+                $detail->recruiter_id = $_SESSION[$this->sessionKey('recruiter')]->id;
+            else
+                $detail->recruiter_id = NULL;
+            
             return $detail;
         }
         
         protected function list_data($data) {
             
-            // Load address oneliners for found ads. Store with the same ID as the ads list.
-            $idArray = array();
-            $idArrayReverse = array();
+            // Load address and recruiter oneliners for found ads. Store with the same ID as the ads list.
+            $addressIdArray = array();
+            $recruiterIdArray = array();
             foreach( $data as $rec ) {
-                $idArray[$rec->id] = $rec->company_address_id;
+                $addressIdArray[$rec->id] = $rec->company_address_id;
+                $recruiterIdArray[$rec->id] = $rec->recruiter_id;
             }
-            $addresses = $this->address_model->getList($idArray);
+            $addresses = $this->address_model->getList($addressIdArray);
             $addrList = array();
             foreach ( $addresses as $addr ) {
                 $addrList[$addr->id] = $this->address_library->oneLineDescription($addr);
+            }
+            $recruiters = $this->recruiter_model->getList($recruiterIdArray);
+            $recrList = array();
+            foreach ( $recruiters as $recr ) {
+                $recrList[$recr->id] = $recr->contact_name . ' ('.$recr->name .')';
             }
             
             $list_data = array();
             foreach($data as $obj) {
                 $list_entry = array('id' => $obj->id, 'title' => default_if_null($obj->title, ''), 'company' => default_if_null($obj->company, ''), 'url' => default_if_null($obj->url, ''), 'vdabreference' => default_if_null($obj->vdab_reference, ''), 'contactname' => default_if_null($obj->contact_name, ''), 'emailaddress' => default_if_null($obj->email_address, ''), 'phonenumber' => default_if_null($obj->phone_number, ''), 'address' => '', 'recruiter' => '', 'action' => '');
-                if(isset($addrList[$obj->company_address_id])) {
+                if(isset($addrList[$obj->company_address_id]))
                     $list_entry['address'] = $addrList[$obj->company_address_id];
-                // TODO recruiter
-                }
+                if(isset($recrList[$obj->recruiter_id]))
+                    $list_entry['recruiter'] = $recrList[$obj->recruiter_id];
                 $list_entry['action'] = '<a href="#" onclick="$(\'#detail_id\').val(\'' . $obj->id . '\'); doAction(\'startEdit\');"  title="' . lang('button-tip-edit-ad') . '"><span class="glyphicon glyphicon-pencil"></span></a>';
                 $list_data[] = $list_entry;
             }
             
             return $list_data;
+        }
+        
+        public function loadrecruiters() {
+            
+            // Calling this method is only allowed through Ajax / POST
+            if ( ! $this->input->is_ajax_request() || empty ( $this->input->post()) ) {
+                $this->redirect();
+                exit;
+            }
+            
+            $this->authentication_library->check('jobsrch/'. $this->urlSegment());
+            
+            // Extract parameters from POST
+            $q = $this->input->post('q');
+            $page = $this->input->post('page');
+            $pagelength = $this->input->post('pagelenght');
+            
+            // Search recruiters on contact name, returning at most 'pagelength' rows starting from 'page' * 'pagelength'.
+            $crit = new Recruiter_criteria();
+            $crit->contact_name = $q;
+            $totalRows = 0;
+            $recruiters = $this->recruiter_model->search($crit, $page * $pagelength, $pagelength, array(array('column'=>'contact_name', 'dir' => 'asc')), $totalRows);
+            
+            // Return found data as JSON.
+            $data = array('items' => $recruiters, 'total_count' => $totalRows);
+            
+            echo json_encode($data);
         }
         
         protected function attribute_for_column($column) {

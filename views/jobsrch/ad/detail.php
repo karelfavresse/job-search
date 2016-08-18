@@ -26,6 +26,69 @@
 </div>
 </nav>
 
+<script type="text/javascript">
+$(document).ready(function() {
+    $("#select-recruiter").select2({
+                                   theme: "bootstrap",
+                                       ajax: {
+                                   type: "POST",
+                                    url: $("#form").attr('action') + '/loadrecruiters',
+                                                     dataType: 'json',
+                                                     delay: 250,
+                                   allowClear:true,
+                                                     data: function (params) {
+                                                     return {
+                                                     q: params.term, // search term
+                                                     page: params.page,
+                                       pagelength: 10
+                                                     };
+                                                     },
+                                                     processResults: function (data, params) {
+                                                     // parse the results into the format expected by Select2
+                                                     // since we are using custom formatting functions we do not need to
+                                                     // alter the remote JSON data, except to indicate that infinite
+                                                     // scrolling can be used
+                                                     params.page = params.page || 1;
+                                                     
+                                                     return {
+                                                     results: data.items,
+                                                     pagination: {
+                                                     more: (params.page * 10) < data.total_count
+                                                     }
+                                                     };
+                                                     },
+                                                     cache: true
+                                                     },
+                                                     escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
+                                                     minimumInputLength: 1,
+                                                     templateResult: formatRecruiter,
+                                                     templateSelection: formatRecruiterSelection,
+                                   initSelection:initRecruiter
+                                                     });
+                  function initRecruiter(element,callback) {
+                  <?php if ( ! empty ( $detail->recruiter_id ) ) : ?>
+                  callback(<?php echo json_encode($recruiter); ?>);
+                  <?php else : ?>
+                  callback(<?php echo json_encode(new Recruiter_entity()); ?>);
+                  <?php endif; ?>
+                  }
+                  function formatRecruiter (recruiter) {
+                  if (recruiter.loading) return recruiter.text;
+                  
+                  var markup =
+                  "<span>" + recruiter.contact_name + " (" + recruiter.name + ")</span>";
+                  
+                  return markup;
+                  }
+                  
+                  function formatRecruiterSelection (recruiter) {
+                  if ( recruiter.id == null)
+                  return "";
+                  return recruiter.contact_name + " (" + recruiter.name +")";
+                  }
+                  });
+</script>
+
 <?php echo validation_errors('<div class="alert alert-danger">', '</div>'); ?>
 
 <div class="row form-group">
@@ -70,6 +133,13 @@
 <div class="col-md-2 col-xs-12 col-sm-5">
 <input type="text" class="form-control" id="phone_number" name="phone_number" value="<?php echo $detail->phone_number;?>">
 </div>
+</div>
+<div class="row form-group">
+    <?php echo lang('label-detail-ad-recruiter', 'recruiter', array('class' => 'control-label col-md-1 col-sm-3')); ?>
+    <div class="col-sm-5 col-md-3 col-xs-12">
+        <select id="select-recruiter" name="recruiter" id="recruiter" class="form-control" >
+        </select>
+    </div>
 </div>
 <?php if(isset($detail->id)) : ?>
 <div class="row form-group">

@@ -5,7 +5,7 @@
     
         public $maxrows;
         
-        public function __construct($data) {
+        public function __construct($data = array()) {
         
             $this->load($data, 'maxrows', 100);
         }

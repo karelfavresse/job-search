@@ -19,6 +19,8 @@
             
             if( ! empty ($crit->name))
                 $this->db->like('name', $crit->name);
+            if ( ! empty ( $crit->contact_name))
+                $this->db->like('contact_name', $crit->name);
         }
         
         protected function entityName() {
