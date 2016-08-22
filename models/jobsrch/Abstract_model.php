@@ -22,7 +22,7 @@
             $this->db->from($this->tableName());
             $this->addCriteria($crit);
             if($start >= 0 and $length > 0 )
-                $this->db->limit($start * $length);
+                $this->db->limit(($start + 1) * $length);
             if($sort !== NULL) {
                 foreach($sort as $sorte) {
                     $this->db->order_by($sorte['column'], $sorte['dir']);

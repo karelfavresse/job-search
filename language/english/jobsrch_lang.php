@@ -39,6 +39,9 @@
     $lang['button-tip-edit-ad'] = 'Edit this Ad';
     $lang['button-tip-save-ad'] = 'Save change to this Ad';
     $lang['button-tip-delete-ad'] = 'Delete this Ad';
+    $lang['button-tip-ad-actions'] = 'Show Actions for this Ad';
+    $lang['button-tip-save-ad-actions'] = 'Save Actions of this Ad';
+    $lang['button-tip-ad-newaction'] = 'Add Action to this Ad';
     
     $lang['label-search-maxrows'] = 'Max. Rows';
     
@@ -99,6 +102,9 @@
     $lang['list-header-ad-recruiter'] = 'Recruiter';
     $lang['list-header-ad-emailaddress'] = 'Email Address';
     $lang['list-header-ad-phonenumber'] = 'Phone Number';
+    $lang['list-header-adaction-date'] = 'Date';
+    $lang['list-header-adaction-type'] = 'Type';
+    $lang['list-header-adaction-comment'] = 'Comment';
 
     $lang['dialog-title-delete'] = 'Delete {type}';
     

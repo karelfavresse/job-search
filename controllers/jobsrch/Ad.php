@@ -6,12 +6,15 @@
     
     class Ad extends AbstractController {
         
+        const LEVEL_ACTIONS = 3;
+        
         protected function loadModel() {
             $this->load->model('jobsrch/ad_model');
             $this->load->library('jobsrch/Address_library');
             $this->load->model('jobsrch/address_model');
             $this->load->helper('jobsrch/value');
             $this->load->model('jobsrch/recruiter_model');
+            $this->load->model('jobsrch/adaction_model');
         }
         
         protected function createCriteria($input = NULL) {
@@ -139,6 +142,56 @@
             return $detail;
         }
         
+        protected function allowAction($action) {
+            if ( ! parent::allowAction($action))
+                return in_array($action, array('listActions', 'saveActions'));
+            return TRUE;
+        }
+        
+        public function saveActions() {
+            // TODO
+        }
+        
+        public function listActions() {
+            
+            
+            $crit = new AdAction_criteria(array('job_ad_id' => $this->input->post('detail_id')));
+            $actions = $this->adaction_model->search($crit);
+            $_SESSION[$this->sessionKey('actions')] = array();
+            
+            $this->setLevel(self::LEVEL_ACTIONS);
+        }
+        
+        protected function load_view($level) {
+            
+            switch($level) {
+                case self::LEVEL_ACTIONS :
+                    $this->load_actions_view();
+                    break;
+                default :
+                    parent::load_view($level);
+                    break;
+            }
+        }
+        
+        protected function load_actions_view() {
+            
+            $data = array();
+            $data['type'] = $this->singularType();
+            $data['actions'] = $_SESSION[$this->sessionKey('actions')];
+            
+            $this->load->view('jobsrch/ad/actions', $data);
+        }
+        
+        public function back() {
+         
+            $level = $_SESSION[$this->sessionKey('level')];
+            if ( $level == self::LEVEL_ACTIONS )
+                $this->setLevel(self::LEVEL_LIST);
+            else
+                parent::back();
+        }
+        
         protected function list_data($data) {
             
             // Load address and recruiter oneliners for found ads. Store with the same ID as the ads list.
@@ -167,6 +220,7 @@
                 if(isset($recrList[$obj->recruiter_id]))
                     $list_entry['recruiter'] = $recrList[$obj->recruiter_id];
                 $list_entry['action'] = '<a href="#" onclick="$(\'#detail_id\').val(\'' . $obj->id . '\'); doAction(\'startEdit\');"  title="' . lang('button-tip-edit-ad') . '"><span class="glyphicon glyphicon-pencil"></span></a>';
+                $list_entry['action'] .= ' <a href="#" onclick="$(\'#detail_id\').val(\'' . $obj->id . '\'); doAction(\'listActions\');" title="' . lang('button-tip-ad-actions') . '"><span class="glyphicon glyphicon-time"></span></a>';
                 $list_data[] = $list_entry;
             }
             

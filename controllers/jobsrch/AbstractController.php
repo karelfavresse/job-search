@@ -154,6 +154,13 @@
         }
         
         /**
+         * Returns whether the specified action is allowed.
+         */
+        protected function allowAction($action) {
+            return in_array($action, array('search', 'list', 'startEdit', 'reset', 'back', 'refresh', 'create', 'save', 'delete'));
+        }
+        
+        /**
          * Main entry for the controller. Dispatches based on action field.
          */
         public function index() {
@@ -164,8 +171,12 @@
             
             // Perform action if specified
             $action = $this->input->post('action');
-            if ( $action != NULL )
-                $this->$action();
+            if ( $action != NULL ) {
+                if ( method_exists($this, $action) and $this->allowAction($action) )
+                    $this->$action();
+                else
+                    UIMessage::addError('No such action: ' . $action);
+            }
             
             if(isset($_SESSION[$this->sessionKey('level')]))
                 $level = $_SESSION[$this->sessionKey('level')];
@@ -183,6 +194,19 @@
                 $this->load->view('jobsrch/header', $data);
             }
             
+            $this->load_view($level);
+            
+            if ( $action === NULL )
+                $this->load->view('jobsrch/footer');
+
+            session_write_close();
+        }
+        
+        /**
+         * Load the correct view based on the specified level. Default implementation handles SEARCH, LIST and DETAIL levels.
+         */
+        protected function load_view($level) {
+            
             switch($level) {
                 case self::LEVEL_SEARCH :
                     $this->load_search_view();
@@ -195,10 +219,6 @@
                     break;
             }
             
-            if ( $action === NULL )
-                $this->load->view('jobsrch/footer');
-
-            session_write_close();
         }
         
         /**
