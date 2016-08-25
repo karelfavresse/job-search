@@ -250,7 +250,14 @@
             }
             
             // Delete any actions not in the currently loaded actions.
-            $this->adaction_model->deleteList(array_keys($actions), TRUE);
+            $crit = new AdAction_criteria(array('job_ad_id' => $adId));
+            $adActions = $this->adaction_model->search($crit);
+            $delIds = array();
+            foreach($adActions as $adAct) {
+                if ( ! isset($actions[$adAct->id]) )
+                    $delIds[] = $adAct->id;
+            }
+            $this->adaction_model->deleteList($delIds);
             
             if($this->db->trans_status() !== FALSE)
                 UIMessage::addInfo('Actions saved');
