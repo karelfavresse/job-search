@@ -165,6 +165,11 @@
          */
         public function index() {
             
+            $enableProfiling = $this->config->item('enable_profiling');
+            if($enableProfiling=== NULL)
+                $enableProfiling = FALSE;
+            $this->output->enable_profiler($enableProfiling);
+            
             $this->authentication_library->check('jobsrch/'. $this->urlSegment());
 
             $this->load->helper('form');

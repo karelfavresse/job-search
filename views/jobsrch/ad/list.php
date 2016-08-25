@@ -56,7 +56,7 @@ $(document).ready(function() {
                                        {"data" : "recruiter"},
                                        {"data" : "url", "orderable" : false},
                                        {"data" : "vdabreference"},
-                                       {"data" : "action", "orderable" : false}
+                                       {"data" : "action", "orderable" : false, "width" : "5em"}
                                        ]
                                        });
                   } );

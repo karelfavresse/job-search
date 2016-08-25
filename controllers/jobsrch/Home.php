@@ -20,6 +20,11 @@
 
         public function index()
         {
+            $enableProfiling = $this->config->item('enable_profiling');
+            if($enableProfiling === NULL)
+                $enableProfiling = FALSE;
+            $this->output->enable_profiler($enableProfiling);
+
             $this->load->helper('form');
             
             $data['title'] = lang('title-home');

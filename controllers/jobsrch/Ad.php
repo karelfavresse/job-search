@@ -3,6 +3,7 @@
     
     require_once __DIR__ . '/AbstractController.php';
     require_once dirname(dirname(__DIR__)) . '/models/jobsrch/Ad_entity.php';
+    require_once dirname(dirname(__DIR__)) . '/models/jobsrch/AdAction_entity.php';
     
     class Ad extends AbstractController {
         
@@ -144,22 +145,121 @@
         
         protected function allowAction($action) {
             if ( ! parent::allowAction($action))
-                return in_array($action, array('listActions', 'saveActions'));
+                return in_array($action, array('listActions', 'saveActions', 'deleteAction', 'removeAction', 'addAction'));
             return TRUE;
         }
         
+        private function storeActionPageData() {
+            $_SESSION[$this->sessionKey('actionPageLength')] = $this->input->post('actions_length');
+            $_SESSION[$this->sessionKey('actionPageStart')] = $this->input->post('action_start_page');
+        }
+        
+        private function loadActionPageData(&$data) {
+            if(isset($_SESSION[$this->sessionKey('actionPageLength')]))
+                $data['actionPageLength'] = $_SESSION[$this->sessionKey('actionPageLength')];
+            else
+                $data['actionPageLength'] = 10;
+            if ( isset($_SESSION[$this->sessionKey('actionPageStart')]))
+                $data['actionPageStart'] = $_SESSION[$this->sessionKey('actionPageStart')] * $data['actionPageLength'];
+            else
+                $data['actionPageStart'] = 0 * $data['actionPageLength'];
+        }
+        
+        public function addAction() {
+            
+            $this->storeActionPageData();
+            
+            $actions =& $_SESSION[$this->sessionKey('actions')];
+            $act = new AdAction_entity();
+            if( ! isset($_SESSION[$this->sessionKey('new_action_id')]))
+                $_SESSION[$this->sessionKey('new_action_id')] = 0;
+            $act->id = $_SESSION[$this->sessionKey('new_action_id')] - 1;
+            $_SESSION[$this->sessionKey('new_action_id')] = $act->id;
+            $act->date = date_format(date_create(NULL, timezone_open('UTC')), 'Y-m-d');
+            $actions[$act->id] = $act;
+        }
+        
+        public function removeAction() {
+            
+            $this->storeActionPageData();
+
+            $id = $this->input->post('action_id');
+            if ( empty($id) )
+                return;
+            
+            $actions =& $_SESSION[$this->sessionKey('actions')];
+            unset($actions[$id]);
+        }
+        
         public function saveActions() {
+
+            $this->storeActionPageData();
+
+            // Get data from post info. This is a serialized string.
+            $actionData = array();
+            parse_str($this->input->post('action_data'), $actionData);
+            // Can't use array_filter with ARRAY_FILTER_USE_KEY, still on 5.5...
+            $actionIds = array();
+            foreach($actionData as $ak => $av){
+                if( substr($ak, 0, strlen('action-type-')) === 'action-type-')
+                    $actionIds[] = substr($ak, strlen('action-type-'));
+            }
+            // Update actions from session
+            $adId = $_SESSION[$this->sessionKey('actions_ad_id')];
+            $actions =& $_SESSION[$this->sessionKey('actions')];
+            foreach($actionIds as $actId) {
+                if( ! isset($actions[$actId])) {
+                    // Shouldn't happen, skip
+                    continue;
+                }
+                $act =& $actions[$actId];
+                $act->job_ad_id = $adId;
+                $act->date = $actionData['action-date-' . $actId];
+                $act->type = $actionData['action-type-' . $actId];
+                $act->comment = $actionData['action-comment-' . $actId];
+                unset($act);
+            }
+            
+            // Check if all actions are currently valid
             // TODO
+            
+            $this->db->trans_start();
+            
+            // Save all currently loaded actions
+            foreach($actions as $actId => $act) {
+                if($act->id > 0)
+                    $a = $this->adaction_model->update($act);
+                else
+                    $a = $this->adaction_model->insert($act);
+                if ($a === FALSE) {
+                    UIMessage::addError('Failed to save actions, cause: ' . $act->id);
+                } else {
+                    if ( $a->id != $actId )
+                        unset($actions[$actId]);
+                    $actions[$a->id] = $a;
+                }
+            }
+            
+            // Delete any actions not in the currently loaded actions.
+            $this->adaction_model->deleteList(array_keys($actions));
+            
+            if($this->db->trans_status() !== FALSE)
+                UIMessage::addInfo('Actions saved');
+            
+             
+            $this->db->trans_complete();
         }
         
         public function listActions() {
             
-            
             $crit = new AdAction_criteria(array('job_ad_id' => $this->input->post('detail_id')));
             $actions = $this->adaction_model->search($crit);
-            $_SESSION[$this->sessionKey('actions')] = array();
+            $_SESSION[$this->sessionKey('actions')] = $actions;
+            $_SESSION[$this->sessionKey('actions_ad_id')] = $this->input->post('detail_id');
             
             $this->setLevel(self::LEVEL_ACTIONS);
+            
+            unset($_SESSION[$this->sessionKey('actionPageStart')]);
         }
         
         protected function load_view($level) {
@@ -179,6 +279,7 @@
             $data = array();
             $data['type'] = $this->singularType();
             $data['actions'] = $_SESSION[$this->sessionKey('actions')];
+            $this->loadActionPageData($data);
             
             $this->load->view('jobsrch/ad/actions', $data);
         }
@@ -186,8 +287,10 @@
         public function back() {
          
             $level = $_SESSION[$this->sessionKey('level')];
-            if ( $level == self::LEVEL_ACTIONS )
+            if ( $level == self::LEVEL_ACTIONS ) {
                 $this->setLevel(self::LEVEL_LIST);
+                unset($_SESSION[$this->sessionKey('actions_ad_id')]);
+            }
             else
                 parent::back();
         }

@@ -52,7 +52,7 @@
                                     {"data" : "address", "orderable" : false},
                                     {"data" : "emailaddress", "orderable" : false},
                                     {"data" : "phonenumber"},
-                                    {"data" : "action", "orderable" : false}
+                                    {"data" : "action", "orderable" : false, "width" : "5em"}
                                  ]
             });
         } );

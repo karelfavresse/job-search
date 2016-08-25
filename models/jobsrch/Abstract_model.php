@@ -54,7 +54,7 @@
                 $obj = $query->unbuffered_row($this->entityName());
                 if ( $obj === FALSE )
                     break;
-                $data[] = $obj;
+                $data[$obj->id] = $obj;
             }
             
             return $data;
@@ -109,11 +109,39 @@
             
             $query = $this->db->get();
             
-            return $query->custom_result_object($this->entityName());
+            $length = $query->num_rows();
+            $data = array();
+            for($i = 0 ; $i < $length ; $i++) {
+                $obj = $query->unbuffered_row($this->entityName());
+                if ( $obj === FALSE )
+                    break;
+                $data[$obj->id] = $obj;
+            }
+    
+            return $data;
         }
 
+        /**
+         * Deletes the specified detail.
+         * Object $detail the detail to delete.
+         * @return boolean TRUE if the delete succeeded, FALSE if not.
+         */
         public function delete($detail) {
             return $this->db->delete($this->tableName(), array('id' => $detail->id, 'version' => $detail->version)) !== FALSE;
+        }
+        
+        /**
+         * Deletes all objects whose ID is not in the specified array.
+         * @return boolean TRUE if the delete succeeded, FALSE if not.
+         */
+        public function deleteList($idArray) {
+            
+            if ( empty ( $idArray ) )
+                return array();
+            
+            $this->db->where_not_in('id', $idArray);
+            
+            return $this->db->delete($this->tableName()) !== FALSE;
         }
         
         /**

@@ -20,6 +20,7 @@
     $lang['button-title-delete'] = 'Delete';
     $lang['button-title-cancel'] = 'Cancel';
     $lang['button-title-login'] = 'Login';
+    $lang['button-title-add'] = 'Add';
 
     $lang['button-tip-search-recruiter'] = 'Search Recruiters';
     $lang['button-tip-reset-recruiter'] = 'Reset search criteria';
@@ -41,7 +42,8 @@
     $lang['button-tip-delete-ad'] = 'Delete this Ad';
     $lang['button-tip-ad-actions'] = 'Show Actions for this Ad';
     $lang['button-tip-save-ad-actions'] = 'Save Actions of this Ad';
-    $lang['button-tip-ad-newaction'] = 'Add Action to this Ad';
+    $lang['button-tip-ad-addaction'] = 'Add Action to this Ad';
+    $lang['button-tip-ad-remove-action'] = 'Remove Action';
     
     $lang['label-search-maxrows'] = 'Max. Rows';
     
@@ -105,6 +107,13 @@
     $lang['list-header-adaction-date'] = 'Date';
     $lang['list-header-adaction-type'] = 'Type';
     $lang['list-header-adaction-comment'] = 'Comment';
+    
+    $lang['action-type-cmmnt'] = 'Comment';
+    $lang['action-type-intrvw'] = 'Interview';
+    $lang['action-type-rssent'] = 'Resume Sent';
+    $lang['action-type-gnrply'] = 'General Reply';
+    $lang['action-type-negrpy'] = 'Negative Reply';
+    $lang['action-type-invite'] = 'Invitation';
 
     $lang['dialog-title-delete'] = 'Delete {type}';
     
