@@ -513,4 +513,4 @@ $config['rewrite_short_tags'] = FALSE;
 $config['proxy_ips'] = '';
     
     
-    $config['enable_profiling'] = TRUE;
+    $config['enable_profiling'] = FALSE;

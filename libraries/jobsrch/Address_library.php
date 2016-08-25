@@ -33,7 +33,7 @@
             }
             
             // Otherwise, return the found address.
-            return $result[0];
+            return reset($result);
         }
         
         /**

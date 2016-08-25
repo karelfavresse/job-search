@@ -139,7 +139,7 @@
         public function deleteList($idArray, $not = FALSE) {
 
             if ( empty ( $idArray ) )
-                return array();
+                return TRUE;
             
             if($not)
                 $this->db->where_not_in('id', $idArray);

@@ -362,8 +362,8 @@
             $totalRows = 0;
             $recruiters = $this->recruiter_model->search($crit, $page * $pagelength, $pagelength, array(array('column'=>'contact_name', 'dir' => 'asc')), $totalRows);
             
-            // Return found data as JSON.
-            $data = array('items' => $recruiters, 'total_count' => $totalRows);
+            // Return found data as JSON. Note that SELECT2 does only supports "index" keys (0, 1, 2, ...).
+            $data = array('items' => array_values($recruiters), 'total_count' => $totalRows);
             
             echo json_encode($data);
         }
