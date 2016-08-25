@@ -26,6 +26,19 @@
             return 'AdAction_entity';
         }
         
+        /**
+         * Deletes all actions for the specified ID.
+         * @param integer $adId ID of the ad for which to delete actions
+         * @return boolean TRUE if the delete succeeded, FALSE if not.
+         */
+        public function deleteForAdId($adId) {
+            
+            $crit = new AdAction_criteria(array('job_ad_id' => $adId));
+            $actions = $this->search($crit);
+            $actionIds = array_keys($actions);
+            return $this->deleteList($actionIds, FALSE);
+        }
+        
         public function toData($entity, $incl_id = TRUE) {
             
             $data = parent::toData($entity, $incl_id);

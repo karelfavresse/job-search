@@ -469,6 +469,7 @@
          */
         protected function preSave($detail, $extra) {
             // NOOP
+            return $detail;
         }
         
         /**
@@ -478,6 +479,7 @@
          */
         protected function postSave($detail, $extra) {
             // NOOP
+            return $detail;
         }
         
         /**
@@ -493,15 +495,30 @@
             $this->db->trans_start();
             
             $detail = $_SESSION[$this->sessionKey('detail')];
-            if($this->getModel()->delete($detail)) {
-                unset($_SESSION[$this->sessionKey('detail')]);
-                UIMessage::addInfo($this->getName() . ' "' . $this->delete_name($detail) . '" deleted.');
-                $this->setLevel(self::LEVEL_LIST);
+            $d = $this->preDelete($detail);
+            if($d === FALSE) {
+                UIMessage::addError('Delete aborted');
             } else {
-                UIMessage::addError('Failed to delete ' . $this->getName() );
+                if($this->getModel()->delete($detail)) {
+                    unset($_SESSION[$this->sessionKey('detail')]);
+                    UIMessage::addInfo($this->getName() . ' "' . $this->delete_name($detail) . '" deleted.');
+                    $this->setLevel(self::LEVEL_LIST);
+                } else {
+                    UIMessage::addError('Failed to delete ' . $this->getName() );
+                }
             }
             
             $this->db->trans_complete();
+        }
+        
+        /** 
+         * Perform any actions before the actual delete takes place.
+         * @param object $detail the detail about to be deleted
+         * @return mixed Either the object to be deleted if OK, or FALSE if the object is not to be deleted.
+         */
+        protected function preDelete($detail) {
+            // NOOP
+            return $detail;
         }
         
         /**

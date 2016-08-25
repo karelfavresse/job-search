@@ -140,7 +140,16 @@
             else
                 $detail->recruiter_id = NULL;
             
-            return $detail;
+            return parent::preDelete($detail);
+        }
+        
+        protected function preDelete($detail) {
+            
+            // First delete all actions of the ad
+            if( ! $this->adaction_model->deleteForAdId($detail->id) )
+                return FALSE;
+            
+            return parent::preDelete($detail);
         }
         
         protected function allowAction($action) {
@@ -241,7 +250,7 @@
             }
             
             // Delete any actions not in the currently loaded actions.
-            $this->adaction_model->deleteList(array_keys($actions));
+            $this->adaction_model->deleteList(array_keys($actions), TRUE);
             
             if($this->db->trans_status() !== FALSE)
                 UIMessage::addInfo('Actions saved');

@@ -131,15 +131,20 @@
         }
         
         /**
-         * Deletes all objects whose ID is not in the specified array.
+         * Deletes all objects whose ID is or is not in the specified array, depending on the second parameter.
+         * @param array $idArray the array containing the ids to check on.
+         * @param boolean $not if TRUE, the objects whose ID are NOT in $idArray are deleted, if FALSE the objects with the specified IDs are deleted. Defaults to FALSE.
          * @return boolean TRUE if the delete succeeded, FALSE if not.
          */
-        public function deleteList($idArray) {
-            
+        public function deleteList($idArray, $not = FALSE) {
+
             if ( empty ( $idArray ) )
                 return array();
             
-            $this->db->where_not_in('id', $idArray);
+            if($not)
+                $this->db->where_not_in('id', $idArray);
+            else
+                $this->db->where_in('id', $idArray);
             
             return $this->db->delete($this->tableName()) !== FALSE;
         }
