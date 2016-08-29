@@ -88,7 +88,7 @@ function setActionData() {
     </select>
 </td>
 <td><textarea class="form-control" style="width:100%" id="<?php echo 'action-comment-' . $act->id; ?>" name="<?php echo 'action-comment-' . $act->id; ?>"><?php echo $act->comment; ?></textarea></td>
-<td><a href="#" onclick="$('#action_id').val(<?php echo $act->id; ?>); doAction('removeAction');" title="<?php echo lang('button-tip-ad-remove-action'); ?>"><span class="glyphicon glyphicon-remove"></span></a></td>
+<td><a href="#" onclick="$('#action_id').val(<?php echo $act->id; ?>); setActionData();doAction('removeAction');" title="<?php echo lang('button-tip-ad-remove-action'); ?>"><span class="glyphicon glyphicon-remove"></span></a></td>
 </tr>
 <?php endforeach; ?>
 </tbody>

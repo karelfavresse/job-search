@@ -177,7 +177,8 @@
         public function addAction() {
             
             $this->storeActionPageData();
-            
+            $this->load_actions_from_post();
+
             $actions =& $_SESSION[$this->sessionKey('actions')];
             $act = new AdAction_entity();
             if( ! isset($_SESSION[$this->sessionKey('new_action_id')]))
@@ -191,6 +192,7 @@
         public function removeAction() {
             
             $this->storeActionPageData();
+            $this->load_actions_from_post();
 
             $id = $this->input->post('action_id');
             if ( empty($id) )
@@ -200,10 +202,8 @@
             unset($actions[$id]);
         }
         
-        public function saveActions() {
-
-            $this->storeActionPageData();
-
+        private function load_actions_from_post() {
+            
             // Get data from post info. This is a serialized string.
             $actionData = array();
             parse_str($this->input->post('action_data'), $actionData);
@@ -228,6 +228,14 @@
                 $act->comment = $actionData['action-comment-' . $actId];
                 unset($act);
             }
+        }
+        
+        public function saveActions() {
+
+            $this->storeActionPageData();
+            $this->load_actions_from_post();
+            
+            $actions =& $_SESSION[$this->sessionKey('actions')];
             
             // Check if all actions are currently valid
             // TODO
