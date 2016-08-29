@@ -21,7 +21,7 @@
             
             $this->db->from($this->tableName());
             $this->addCriteria($crit);
-            if($start >= 0 and $length > 0 )
+            if($totalRows === NULL and $start >= 0 and $length > 0 )
                 $this->db->limit(($start + 1) * $length);
             if($sort !== NULL) {
                 foreach($sort as $sorte) {
